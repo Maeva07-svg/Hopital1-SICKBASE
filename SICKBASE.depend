@@ -1,0 +1,57 @@
+# depslib dependency file v1.0
+1771102197 source:c:\users\maeva\desktop\projet info c\sickbase\main.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	"utils.h"
+	"patient.h"
+	"diagnostic.h"
+	"fichiers.h"
+
+1771097068 source:c:\users\maeva\desktop\projet info c\sickbase\utils.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<windows.h>
+	"utils.h"
+
+1771097016 c:\users\maeva\desktop\projet info c\sickbase\utils.h
+
+1771101957 source:c:\users\maeva\desktop\projet info c\sickbase\diagnostic.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"diagnostic.h"
+	"patient.h"
+	"fichiers.h"
+	"utils.h"
+
+1771097257 c:\users\maeva\desktop\projet info c\sickbase\diagnostic.h
+	"utils.h"
+	"patient.h"
+
+1771097148 c:\users\maeva\desktop\projet info c\sickbase\patient.h
+	"utils.h"
+
+1771102041 c:\users\maeva\desktop\projet info c\sickbase\fichiers.h
+	"patient.h"
+
+1771102100 source:c:\users\maeva\desktop\projet info c\sickbase\fichiers.c
+	<stdio.h>
+	<stdlib.h>
+	"fichiers.h"
+	"patient.h"
+	"utils.h"
+
+1771097201 source:c:\users\maeva\desktop\projet info c\sickbase\patient.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"patient.h"
+	"fichiers.h"
+	"diagnostic.h"
+	"utils.h"
+
