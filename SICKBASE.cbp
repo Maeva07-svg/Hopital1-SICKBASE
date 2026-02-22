@@ -32,6 +32,14 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="Makefile.mak" />
+		<Unit filename="archives.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="archives.h" />
+		<Unit filename="consultations.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="consultations.h" />
 		<Unit filename="diagnostic.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -40,13 +48,33 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="fichiers.h" />
+		<Unit filename="fichiers_personnel.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="fichiers_personnel.h" />
+		<Unit filename="fichiers_relations.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="fichiers_relations.h" />
+		<Unit filename="interventions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="interventions.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="ordonnances.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ordonnances.h" />
 		<Unit filename="patient.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="patient.h" />
+		<Unit filename="personnel.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="personnel.h" />
 		<Unit filename="utils.c">
 			<Option compilerVar="CC" />
 		</Unit>

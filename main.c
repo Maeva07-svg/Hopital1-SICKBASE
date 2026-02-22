@@ -5,6 +5,13 @@
 #include "patient.h"
 #include "diagnostic.h"
 #include "fichiers.h"
+#include "personnel.h"
+#include "fichiers_personnel.h"
+#include "consultations.h"
+#include "ordonnances.h"
+#include "interventions.h"
+#include "archives.h"
+#include "fichiers_relations.h"
 
 void menuPrincipal()
 {
@@ -16,17 +23,19 @@ void menuPrincipal()
         color(10, 0);
         printf("\n========================================\n");
         printf("    SYSTEME DE GESTION HOSPITALIER    \n");
-        printf("      avec DIAGNOSTIC AUTOMATIQUE     \n");
-        printf("               Version 3.0            \n");
+        printf("           VERSION COMPLETE 5.0       \n");
         printf("========================================\n\n");
         color(7, 0);
 
         printf("1. Gestion des patients\n");
-        printf("2. Diagnostic medical\n");
-        printf("3. Gestion du personnel\n");
-        printf("4. Gestion des medicaments\n");
-        printf("5. Archives\n");
-        printf("6. Quitter\n");
+        printf("2. Gestion du personnel\n");
+        printf("3. Consultations & Rendez-vous\n");
+        printf("4. Ordonnances & Prescriptions\n");
+        printf("5. Interventions & Prises en charge\n");
+        printf("6. Diagnostic medical\n");
+        printf("7. Archives\n");
+        printf("8. Statistiques generales\n");
+        printf("9. Quitter\n");
         printf("\nVotre choix: ");
 
         scanf("%d", &choix);
@@ -38,30 +47,55 @@ void menuPrincipal()
             menuGestionPatients();
             break;
         case 2:
-            menuDiagnosticMedical();
+            menuGestionPersonnel();
             break;
         case 3:
-            printf("\nGestion du personnel (a implementer)\n");
-            pause();
+            menuConsultations();
             break;
         case 4:
-            printf("\nGestion des medicaments (a implementer)\n");
-            pause();
+            menuOrdonnances();
             break;
         case 5:
-            printf("\nArchives (a implementer)\n");
-            pause();
+            menuInterventions();  // Maintenant actif
             break;
         case 6:
+            menuDiagnosticMedical();
+            break;
+        case 7:
+            // menuArchives(); (à activer quand implémenté)
+            printf("\nModule Archives (en cours de developpement)\n");
+            pause();
+            break;
+        case 8:
+            // Afficher statistiques globales
+            printf("\nSTATISTIQUES GENERALES\n\n");
+            printf("Patients: %d\n", nombrePatients);
+            printf("Personnel: %d\n", nombreEmployes);
+            printf("Consultations: %d\n", nombreConsultations);
+            printf("Ordonnances: %d\n", nombreOrdonnances);
+            printf("Rendez-vous: %d\n", nombreRendezVous);
+            pause();
+            break;
+        case 9:
+            // Sauvegarder toutes les données
             sauvegarderPatients();
-            printf("\nDonnees sauvegardees. Au revoir!\n");
+            sauvegarderPersonnel();
+            sauvegarderConsultations();
+            sauvegarderRendezVous();
+            sauvegarderOrdonnances();
+            sauvegarderInterventions();
+            sauvegarderPrisesEnCharge();
+            sauvegarderArchives();
+            printf("\nToutes les donnees ont ete sauvegardees.\n");
+            printf("Au revoir!\n");
             break;
         default:
             printf("\nChoix invalide!\n");
             pause();
         }
 
-    } while(choix != 6);
+    }
+    while(choix != 9);
 }
 
 int main()
@@ -71,18 +105,39 @@ int main()
     printf("\nCHARGEMENT DU SYSTEME HOSPITALIER...\n");
     color(7, 0);
 
-    // Initialiser la base de données des maladies
+    // Initialiser tous les modules
     initialiserMaladies();
+    initialiserFonctionsPersonnel();
+    initialiserConsultations();
+    initialiserOrdonnances();
+    initialiserInterventions();
+    initialiserArchives();
 
-    // Charger les données existantes
+    // Charger toutes les données
     chargerDernierID();
     chargerPatients();
+    chargerDernierIDPersonnel();
+    chargerPersonnel();
 
-    printf("\nSysteme de diagnostic medical charge!\n");
-    printf("Base de connaissances: %d maladies\n", nombreMaladies);
-    printf("Patients dans la base: %d\n", nombrePatients);
+    chargerConsultations();
+    chargerRendezVous();
+    chargerOrdonnances();
+    chargerInterventions();
+    chargerPrisesEnCharge();
+    chargerArchives();
 
-    Sleep(1500);
+    printf("\n========================================\n");
+    printf("SYSTEME CHARGE AVEC SUCCES!\n");
+    printf("========================================\n");
+    printf("Patients: %d\n", nombrePatients);
+    printf("Personnel: %d\n", nombreEmployes);
+    printf("Consultations: %d\n", nombreConsultations);
+    printf("Ordonnances: %d\n", nombreOrdonnances);
+    printf("Interventions: %d\n", nombreInterventions);
+    printf("Archives: %d\n", nombreArchives);
+    printf("========================================\n");
+
+    Sleep(2000);
 
     menuPrincipal();
 

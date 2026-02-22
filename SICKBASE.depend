@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1771102197 source:c:\users\maeva\desktop\projet info c\sickbase\main.c
+1771773377 source:c:\users\maeva\desktop\projet info c\sickbase\main.c
 	<stdio.h>
 	<stdlib.h>
 	<windows.h>
@@ -7,8 +7,15 @@
 	"patient.h"
 	"diagnostic.h"
 	"fichiers.h"
+	"personnel.h"
+	"fichiers_personnel.h"
+	"consultations.h"
+	"ordonnances.h"
+	"interventions.h"
+	"archives.h"
+	"fichiers_relations.h"
 
-1771097068 source:c:\users\maeva\desktop\projet info c\sickbase\utils.c
+1771702894 source:c:\users\maeva\desktop\projet info c\sickbase\utils.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -16,7 +23,7 @@
 	<windows.h>
 	"utils.h"
 
-1771097016 c:\users\maeva\desktop\projet info c\sickbase\utils.h
+1771772265 c:\users\maeva\desktop\projet info c\sickbase\utils.h
 
 1771101957 source:c:\users\maeva\desktop\projet info c\sickbase\diagnostic.c
 	<stdio.h>
@@ -35,10 +42,10 @@
 1771097148 c:\users\maeva\desktop\projet info c\sickbase\patient.h
 	"utils.h"
 
-1771102041 c:\users\maeva\desktop\projet info c\sickbase\fichiers.h
+1771703034 c:\users\maeva\desktop\projet info c\sickbase\fichiers.h
 	"patient.h"
 
-1771102100 source:c:\users\maeva\desktop\projet info c\sickbase\fichiers.c
+1771703049 source:c:\users\maeva\desktop\projet info c\sickbase\fichiers.c
 	<stdio.h>
 	<stdlib.h>
 	"fichiers.h"
@@ -54,4 +61,111 @@
 	"fichiers.h"
 	"diagnostic.h"
 	"utils.h"
+
+1771702600 c:\users\maeva\desktop\projet info c\sickbase\personnel.h
+	"utils.h"
+
+1771702690 source:c:\users\maeva\desktop\projet info c\sickbase\personnel.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"personnel.h"
+	"fichiers_personnel.h"
+	"utils.h"
+
+1771702805 source:c:\users\maeva\desktop\projet info c\sickbase\fichiers_personnel.c
+	<stdio.h>
+	<stdlib.h>
+	"fichiers_personnel.h"
+	"personnel.h"
+	"utils.h"
+
+1771702757 c:\users\maeva\desktop\projet info c\sickbase\fichiers_personnel.h
+	"personnel.h"
+
+1771772115 source:c:\users\maeva\desktop\projet info c\sickbase\archives.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	"archives.h"
+	"fichiers_relations.h"
+	"utils.h"
+
+1771771913 c:\users\maeva\desktop\projet info c\sickbase\archives.h
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+	"consultations.h"
+	"ordonnances.h"
+	"interventions.h"
+
+1771771472 c:\users\maeva\desktop\projet info c\sickbase\consultations.h
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+
+1771771656 c:\users\maeva\desktop\projet info c\sickbase\ordonnances.h
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+
+1771771784 c:\users\maeva\desktop\projet info c\sickbase\interventions.h
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+
+1771772169 c:\users\maeva\desktop\projet info c\sickbase\fichiers_relations.h
+	"consultations.h"
+	"ordonnances.h"
+	"interventions.h"
+	"archives.h"
+
+1771771536 source:c:\users\maeva\desktop\projet info c\sickbase\consultations.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"consultations.h"
+	"ordonnances.h"
+	"interventions.h"
+	"fichiers_relations.h"
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+
+1771772236 source:c:\users\maeva\desktop\projet info c\sickbase\fichiers_relations.c
+	<stdio.h>
+	<stdlib.h>
+	"fichiers_relations.h"
+	"consultations.h"
+	"ordonnances.h"
+	"interventions.h"
+	"archives.h"
+
+1771773325 source:c:\users\maeva\desktop\projet info c\sickbase\interventions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"interventions.h"
+	"fichiers_relations.h"
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+
+1771771725 source:c:\users\maeva\desktop\projet info c\sickbase\ordonnances.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"ordonnances.h"
+	"fichiers_relations.h"
+	"utils.h"
+	"patient.h"
+	"personnel.h"
 

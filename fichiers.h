@@ -1,5 +1,6 @@
-#ifndef FICHIERS_H_INCLUDED
-#define FICHIERS_H_INCLUDED
+#ifndef FICHIERS_H
+#define FICHIERS_H
+
 #include "patient.h"
 
 // Prototypes des fonctions de gestion des fichiers
@@ -8,4 +9,4 @@ void chargerPatients();
 void sauvegarderDernierID();
 void chargerDernierID();
 
-#endif // FICHIERS_H_INCLUDED
+#endif
