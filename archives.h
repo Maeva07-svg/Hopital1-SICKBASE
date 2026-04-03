@@ -3,7 +3,6 @@
 
 #include "utils.h"
 #include "patient.h"
-#include "personnel.h"
 #include "consultations.h"
 #include "ordonnances.h"
 #include "interventions.h"
