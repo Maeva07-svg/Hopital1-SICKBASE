@@ -1,8 +1,14 @@
-#ifndef PATIENT_H_INCLUDED
-#define PATIENT_H_INCLUDED
+#ifndef PATIENT_H
+#define PATIENT_H
+
 #include "utils.h"
 
-// Structure Patient
+#define MAX_PATIENTS 1000
+#define MAX_NAME 100
+#define MAX_SYMPTOMS 20
+#define MAX_SYMPTOM_LENGTH 100
+
+// Structure Patient (inchangée - compatible avec anciens fichiers)
 typedef struct
 {
     int id;
@@ -18,19 +24,20 @@ typedef struct
     char symptomes[MAX_SYMPTOMS][MAX_SYMPTOM_LENGTH];
     int nb_symptomes;
     char diagnostic[200];
-    char medecin_traitant[MAX_NAME];
+    char medecin_traitant[MAX_NAME];  // Uniquement le nom, pas l'ID
     char date_admission[20];
     char notes[500];
 } Patient;
 
-// Variables globales (déclarées comme extern)
+// Variables globales
 extern Patient patients[MAX_PATIENTS];
 extern int nombrePatients;
 extern int dernierID;
 
-// Prototypes des fonctions patients
+// Prototypes
 void ajouterNouveauPatient();
 void afficherListePatientsSimple();
+void afficherListePatientsPourMedecin(int id_medecin);
 void afficherDetailsCompletsPatient(int index);
 int rechercherParID(int id);
 void rechercherPatient();
@@ -39,5 +46,11 @@ void supprimerPatient(int index);
 void menuAffichagePatients();
 void menuGestionPatients();
 void afficherStatistiques();
+int genererID();
+void completerDossierPatient(int id_compte);
+void questionnaireMedical(int id_patient);
+int patientEstLieAuMedecin(int id_patient, int id_medecin);
+void modifierMedecinTraitant(int id_patient);
+int getMedecinIDByName(char *nom_medecin);  // NOUVEAU: cherche l'ID à partir du nom
 
-#endif // PATIENT_H_INCLUDED
+#endif

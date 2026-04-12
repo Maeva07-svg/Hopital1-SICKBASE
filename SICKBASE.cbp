@@ -48,6 +48,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="diagnostic.h" />
+		<Unit filename="facturation.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="facturation.h" />
 		<Unit filename="fichiers.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -55,6 +59,7 @@
 		<Unit filename="fichiers_comptes.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="fichiers_diagnostic.h" />
 		<Unit filename="fichiers_personnel.c">
 			<Option compilerVar="CC" />
 		</Unit>

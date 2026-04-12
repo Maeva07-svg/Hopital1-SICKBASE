@@ -27,7 +27,7 @@ typedef struct {
     char login[MAX_LOGIN];
     char mot_de_passe[MAX_MDP];
     ProfilUtilisateur profil;
-    int id_associe;
+    int id_associe;                   // ID patient ou ID employé associé
     int actif;
     char date_creation[20];
     char date_derniere_connexion[20];
@@ -36,6 +36,7 @@ typedef struct {
     char historique_connexions[MAX_HISTORIQUE_CONNEXION][30];
     int nb_connexions;
     char notes[200];
+    int compte_complet;               // 0 = incomplet, 1 = complet
 } CompteUtilisateur;
 
 // Variables globales
@@ -48,6 +49,7 @@ extern CompteUtilisateur *utilisateur_actuel;
 void initialiserComptes();
 void creerCompteAdministrateur();
 void creerComptePatient(int id_patient);
+void creerComptePatientAuto();        // NOUVEAU: création auto sans patient existant
 void creerComptePersonnel(int id_personnel, ProfilUtilisateur profil);
 int login();
 void logout();
@@ -59,6 +61,8 @@ void journaliserConnexion(int id_compte, int succes);
 void gererComptes();
 void afficherMenuParProfil();
 int verifierDroit(const char *action);
+int estCompteComplet(int id_compte);   // NOUVEAU
+void marquerCompteComplet(int id_compte); // NOUVEAU
 
 // Fonctions pour les fichiers
 void sauvegarderComptes();

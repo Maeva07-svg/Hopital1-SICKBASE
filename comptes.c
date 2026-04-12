@@ -222,6 +222,104 @@ void creerComptePatient(int id_patient)
     printf("Mot de passe par defaut: patient123\n");
 }
 
+// Création automatique d'un compte patient sans patient pré-existant
+void creerComptePatientAuto()
+{
+    system("cls");
+    printf("\n=== CREATION D'UN COMPTE PATIENT ===\n\n");
+
+    CompteUtilisateur compte;
+    memset(&compte, 0, sizeof(CompteUtilisateur));
+
+    compte.id_compte = ++dernierIDCompte;
+    compte.profil = ROLE_PATIENT;
+    compte.actif = 1;
+    compte.tentative_echec = 0;
+    compte.bloque = 0;
+    compte.compte_complet = 0;  // Compte incomplet, à compléter
+
+    printf("CREATION DE VOTRE COMPTE\n");
+    printf("------------------------\n");
+
+    printf("Choisissez votre login: ");
+    fgets(compte.login, MAX_LOGIN, stdin);
+    compte.login[strcspn(compte.login, "\n")] = '\0';
+
+    // Vérifier si le login existe déjà
+    for (int i = 0; i < nombreComptes; i++)
+    {
+        if (strcmp(comptes[i].login, compte.login) == 0)
+        {
+            printf("Ce login existe deja. Veuillez en choisir un autre.\n");
+            dernierIDCompte--;
+            pause();
+            return;
+        }
+    }
+
+    printf("Choisissez votre mot de passe: ");
+    fgets(compte.mot_de_passe, MAX_MDP, stdin);
+    compte.mot_de_passe[strcspn(compte.mot_de_passe, "\n")] = '\0';
+
+    printf("Confirmez votre mot de passe: ");
+    char confirmation[MAX_MDP];
+    fgets(confirmation, MAX_MDP, stdin);
+    confirmation[strcspn(confirmation, "\n")] = '\0';
+
+    if (strcmp(compte.mot_de_passe, confirmation) != 0)
+    {
+        printf("Les mots de passe ne correspondent pas.\n");
+        dernierIDCompte--;
+        pause();
+        return;
+    }
+
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(compte.date_creation, "%02d/%02d/%04d", tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900);
+
+    // ID associé temporaire (sera mis à jour après création du dossier patient)
+    compte.id_associe = 0;
+
+    comptes[nombreComptes] = compte;
+    nombreComptes++;
+
+    sauvegarderComptes();
+
+    printf("\n=== COMPTE CREE AVEC SUCCES ===\n");
+    printf("Login: %s\n", compte.login);
+    printf("Veuillez vous connecter pour completer votre dossier medical.\n");
+
+    pause();
+}
+
+// Vérifier si un compte patient est complet
+int estCompteComplet(int id_compte)
+{
+    for (int i = 0; i < nombreComptes; i++)
+    {
+        if (comptes[i].id_compte == id_compte && comptes[i].profil == ROLE_PATIENT)
+        {
+            return comptes[i].compte_complet;
+        }
+    }
+    return 0;
+}
+
+// Marquer un compte comme complet
+void marquerCompteComplet(int id_compte)
+{
+    for (int i = 0; i < nombreComptes; i++)
+    {
+        if (comptes[i].id_compte == id_compte)
+        {
+            comptes[i].compte_complet = 1;
+            sauvegarderComptes();
+            break;
+        }
+    }
+}
+
 void creerComptePersonnel(int id_personnel, ProfilUtilisateur profil)
 {
     if (id_personnel <= 0) return;

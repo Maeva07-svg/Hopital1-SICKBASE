@@ -7,6 +7,8 @@
 #include "utils.h"
 #include "patient.h"
 #include "personnel.h"
+#include "consultations.h"
+#include "fichiers_rdv.h"
 
 // Définition des variables globales
 Creneau creneaux[MAX_CRENEAUX * MAX_JOURS];
@@ -26,17 +28,19 @@ void initialiserModuleRdv()
 
 void genererCreneauxPourMedecin(int id_medecin, char *date)
 {
-    // Vérifier si les créneaux existent déjà
-    for (int i = 0; i < nombreCreneaux; i++) {
-        if (creneaux[i].id_medecin == id_medecin && strcmp(creneaux[i].date, date) == 0) {
+    for (int i = 0; i < nombreCreneaux; i++)
+    {
+        if (creneaux[i].id_medecin == id_medecin && strcmp(creneaux[i].date, date) == 0)
+        {
             printf("Les creneaux pour cette date existent deja.\n");
             return;
         }
     }
 
-    int nb_creneaux = ((HEURE_FIN - HEURE_DEBUT) * 60) / DUREE_CRENEAU;
+    int nb_creneaux_jour = ((HEURE_FIN - HEURE_DEBUT) * 60) / DUREE_CRENEAU;
 
-    for (int i = 0; i < nb_creneaux; i++) {
+    for (int i = 0; i < nb_creneaux_jour; i++)
+    {
         Creneau c;
         memset(&c, 0, sizeof(Creneau));
 
@@ -59,7 +63,7 @@ void genererCreneauxPourMedecin(int id_medecin, char *date)
     }
 
     sauvegarderCreneaux();
-    printf("%d creneaux generes pour le %s.\n", nb_creneaux, date);
+    printf("%d creneaux generes pour le %s.\n", nb_creneaux_jour, date);
 }
 
 void genererCreneauxSemaine(int id_medecin, char *date_debut)
@@ -67,7 +71,8 @@ void genererCreneauxSemaine(int id_medecin, char *date_debut)
     int jour, mois, annee;
     sscanf(date_debut, "%d/%d/%d", &jour, &mois, &annee);
 
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 7; i++)
+    {
         char date[20];
         sprintf(date, "%02d/%02d/%04d", jour + i, mois, annee);
         genererCreneauxPourMedecin(id_medecin, date);
@@ -79,7 +84,8 @@ void afficherPlanningMedecin(int id_medecin, char *date)
     system("cls");
 
     int idx_medecin = rechercherEmployeParID(id_medecin);
-    if (idx_medecin == -1) {
+    if (idx_medecin == -1)
+    {
         printf("Medecin non trouve.\n");
         pause();
         return;
@@ -93,16 +99,22 @@ void afficherPlanningMedecin(int id_medecin, char *date)
     printf("-----------|-------------|------------------\n");
 
     int trouve = 0;
-    for (int i = 0; i < nombreCreneaux; i++) {
-        if (creneaux[i].id_medecin == id_medecin && strcmp(creneaux[i].date, date) == 0) {
+    for (int i = 0; i < nombreCreneaux; i++)
+    {
+        if (creneaux[i].id_medecin == id_medecin && strcmp(creneaux[i].date, date) == 0)
+        {
             trouve = 1;
             char patient_info[25] = "Libre";
 
-            if (creneaux[i].disponible == 0) {
-                for (int j = 0; j < nombreRdvAvance; j++) {
-                    if (rendezVousAvance[j].id_creneau == creneaux[i].id_creneau) {
+            if (creneaux[i].disponible == 0)
+            {
+                for (int j = 0; j < nombreRdvAvance; j++)
+                {
+                    if (rendezVousAvance[j].id_creneau == creneaux[i].id_creneau)
+                    {
                         int idx_patient = rechercherParID(rendezVousAvance[j].id_patient);
-                        if (idx_patient != -1) {
+                        if (idx_patient != -1)
+                        {
                             sprintf(patient_info, "%s %s",
                                     patients[idx_patient].prenom,
                                     patients[idx_patient].nom);
@@ -112,20 +124,24 @@ void afficherPlanningMedecin(int id_medecin, char *date)
                 }
                 printf("%s - %s | RESERVE    | %s\n",
                        creneaux[i].heure_debut, creneaux[i].heure_fin, patient_info);
-            } else {
+            }
+            else
+            {
                 printf("%s - %s | DISPONIBLE | %s\n",
                        creneaux[i].heure_debut, creneaux[i].heure_fin, patient_info);
             }
         }
     }
 
-    if (!trouve) {
+    if (!trouve)
+    {
         printf("Aucun creneau genere pour cette date.\n");
         printf("\nVoulez-vous generer les creneaux? (O/N): ");
         char reponse;
         scanf("%c", &reponse);
         viderBuffer();
-        if (toupper(reponse) == 'O') {
+        if (toupper(reponse) == 'O')
+        {
             genererCreneauxPourMedecin(id_medecin, date);
             afficherPlanningMedecin(id_medecin, date);
         }
@@ -139,7 +155,8 @@ void prendreRendezVousAvance()
     system("cls");
     printf("\n=== PRISE DE RENDEZ-VOUS AVANCEE ===\n\n");
 
-    if (nombrePatients == 0) {
+    if (nombrePatients == 0)
+    {
         printf("Aucun patient enregistre.\n");
         pause();
         return;
@@ -152,7 +169,8 @@ void prendreRendezVousAvance()
     viderBuffer();
 
     int idx_patient = rechercherParID(id_patient);
-    if (idx_patient == -1) {
+    if (idx_patient == -1)
+    {
         printf("Patient non trouve.\n");
         pause();
         return;
@@ -168,26 +186,29 @@ void prendreRendezVousAvance()
     fgets(date, 20, stdin);
     date[strcspn(date, "\n")] = '\0';
 
-    // Afficher les créneaux disponibles
     printf("\nCRENEAUX DISPONIBLES:\n");
     int creneaux_dispo[MAX_CRENEAUX];
     int nb_dispo = 0;
 
-    for (int i = 0; i < nombreCreneaux; i++) {
+    for (int i = 0; i < nombreCreneaux; i++)
+    {
         if (creneaux[i].id_medecin == id_medecin &&
             strcmp(creneaux[i].date, date) == 0 &&
-            creneaux[i].disponible == 1) {
+            creneaux[i].disponible == 1)
+        {
             printf("%d. %s - %s\n", nb_dispo + 1, creneaux[i].heure_debut, creneaux[i].heure_fin);
             creneaux_dispo[nb_dispo++] = i;
         }
     }
 
-    if (nb_dispo == 0) {
+    if (nb_dispo == 0)
+    {
         printf("Aucun creneau disponible. Voulez-vous generer des creneaux? (O/N): ");
         char rep;
         scanf("%c", &rep);
         viderBuffer();
-        if (toupper(rep) == 'O') {
+        if (toupper(rep) == 'O')
+        {
             genererCreneauxPourMedecin(id_medecin, date);
             prendreRendezVousAvance();
         }
@@ -199,7 +220,8 @@ void prendreRendezVousAvance()
     scanf("%d", &choix);
     viderBuffer();
 
-    if (choix < 1 || choix > nb_dispo) {
+    if (choix < 1 || choix > nb_dispo)
+    {
         printf("Choix invalide.\n");
         pause();
         return;
@@ -227,8 +249,12 @@ void prendreRendezVousAvance()
     fgets(rdv.motif, 200, stdin);
     rdv.motif[strcspn(rdv.motif, "\n")] = '\0';
 
-    strcpy(rdv.statut, "Confirmé");
+    strcpy(rdv.statut, "Confirme");
     strcpy(rdv.rappel_envoye, "Non");
+
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(rdv.date_creation, "%02d/%02d/%04d", tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900);
 
     creneaux[idx_creneau].disponible = 0;
     creneaux[idx_creneau].id_rdv = rdv.id_rdv;
@@ -240,67 +266,50 @@ void prendreRendezVousAvance()
     sauvegarderRendezVousAvance();
 
     printf("\n=== RENDEZ-VOUS PRIS AVEC SUCCES ===\n");
-    printf("ID: %d\n", rdv.id_rdv);
+    printf("ID Rendez-vous: %d\n", rdv.id_rdv);
     printf("Patient: %s %s\n", patients[idx_patient].prenom, patients[idx_patient].nom);
     printf("Date: %s a %s\n", rdv.date, rdv.heure);
-
-    pause();
-}
-
-// Lister les rendez-vous d'un patient
-void listerRendezVousPatient(int id_patient)
-{
-    system("cls");
-    printf("\n=== RENDEZ-VOUS DU PATIENT ID: %d ===\n\n", id_patient);
-
-    int compteur = 0;
-    for (int i = 0; i < nombreRdvAvance; i++)
-    {
-        if (rendezVousAvance[i].id_patient == id_patient)
-        {
-            compteur++;
-            printf("[%d] %s a %s - Medecin ID: %d - %s - %s\n",
-                   compteur,
-                   rendezVousAvance[i].date,
-                   rendezVousAvance[i].heure,
-                   rendezVousAvance[i].id_medecin,
-                   rendezVousAvance[i].type,
-                   rendezVousAvance[i].statut);
-        }
-    }
-
-    if (compteur == 0)
-    {
-        printf("Aucun rendez-vous pour ce patient.\n");
-    }
+    printf("Duree: %d minutes\n", rdv.duree);
 
     pause();
 }
 
 void annulerRendezVousAvance(int id_rdv)
 {
-    for (int i = 0; i < nombreRdvAvance; i++) {
-        if (rendezVousAvance[i].id_rdv == id_rdv) {
-            printf("\nAnnuler le rendez-vous du %s a %s? (O/N): ",
-                   rendezVousAvance[i].date, rendezVousAvance[i].heure);
+    for (int i = 0; i < nombreRdvAvance; i++)
+    {
+        if (rendezVousAvance[i].id_rdv == id_rdv)
+        {
+            printf("\n=== ANNULATION RENDEZ-VOUS ===\n");
+            printf("Rendez-vous du %s a %s\n", rendezVousAvance[i].date, rendezVousAvance[i].heure);
+            printf("Confirmer l annulation? (O/N): ");
+
             char confirmation;
             scanf("%c", &confirmation);
             viderBuffer();
 
-            if (toupper(confirmation) == 'O') {
-                strcpy(rendezVousAvance[i].statut, "Annulé");
+            if (toupper(confirmation) == 'O')
+            {
+                strcpy(rendezVousAvance[i].statut, "Annule");
 
-                for (int j = 0; j < nombreCreneaux; j++) {
-                    if (creneaux[j].id_creneau == rendezVousAvance[i].id_creneau) {
+                for (int j = 0; j < nombreCreneaux; j++)
+                {
+                    if (creneaux[j].id_creneau == rendezVousAvance[i].id_creneau)
+                    {
                         creneaux[j].disponible = 1;
                         creneaux[j].id_rdv = 0;
+                        strcpy(creneaux[j].motif, "");
                         break;
                     }
                 }
 
                 sauvegarderCreneaux();
                 sauvegarderRendezVousAvance();
-                printf("Rendez-vous annule.\n");
+                printf("Rendez-vous annule avec succes.\n");
+            }
+            else
+            {
+                printf("Annulation abandonnee.\n");
             }
             pause();
             return;
@@ -312,9 +321,11 @@ void annulerRendezVousAvance(int id_rdv)
 
 void confirmerRendezVousAvance(int id_rdv)
 {
-    for (int i = 0; i < nombreRdvAvance; i++) {
-        if (rendezVousAvance[i].id_rdv == id_rdv) {
-            strcpy(rendezVousAvance[i].statut, "Confirmé");
+    for (int i = 0; i < nombreRdvAvance; i++)
+    {
+        if (rendezVousAvance[i].id_rdv == id_rdv)
+        {
+            strcpy(rendezVousAvance[i].statut, "Confirme");
             sauvegarderRendezVousAvance();
             printf("Rendez-vous confirme.\n");
             pause();
@@ -325,10 +336,91 @@ void confirmerRendezVousAvance(int id_rdv)
     pause();
 }
 
+void listerRendezVousPatientAvance(int id_patient)
+{
+    system("cls");
+    printf("\n=== MES RENDEZ-VOUS ===\n\n");
+
+    int compteur = 0;
+    printf("ID  | Date       | Heure    | Medecin            | Statut\n");
+    printf("----|------------|----------|--------------------|------------\n");
+
+    for (int i = 0; i < nombreRdvAvance; i++)
+    {
+        if (rendezVousAvance[i].id_patient == id_patient)
+        {
+            compteur++;
+            int idx_medecin = rechercherEmployeParID(rendezVousAvance[i].id_medecin);
+            char nom_medecin[50] = "Inconnu";
+            if (idx_medecin != -1)
+                sprintf(nom_medecin, "Dr %s %s", personnel[idx_medecin].prenom, personnel[idx_medecin].nom);
+
+            printf("%-4d| %-10s | %-8s | %-20s | %s\n",
+                   rendezVousAvance[i].id_rdv,
+                   rendezVousAvance[i].date,
+                   rendezVousAvance[i].heure,
+                   nom_medecin,
+                   rendezVousAvance[i].statut);
+        }
+    }
+
+    if (compteur == 0)
+    {
+        printf("Aucun rendez-vous trouve.\n");
+    }
+    else
+    {
+        printf("\nTotal: %d rendez-vous\n", compteur);
+    }
+
+    pause();
+}
+
+void listerRendezVousMedecinAvance(int id_medecin)
+{
+    system("cls");
+    printf("\n=== MES RENDEZ-VOUS ===\n\n");
+
+    int compteur = 0;
+    printf("ID  | Date       | Heure    | Patient            | Statut\n");
+    printf("----|------------|----------|--------------------|------------\n");
+
+    for (int i = 0; i < nombreRdvAvance; i++)
+    {
+        if (rendezVousAvance[i].id_medecin == id_medecin)
+        {
+            compteur++;
+            int idx_patient = rechercherParID(rendezVousAvance[i].id_patient);
+            char nom_patient[50] = "Inconnu";
+            if (idx_patient != -1)
+                sprintf(nom_patient, "%s %s", patients[idx_patient].prenom, patients[idx_patient].nom);
+
+            printf("%-4d| %-10s | %-8s | %-20s | %s\n",
+                   rendezVousAvance[i].id_rdv,
+                   rendezVousAvance[i].date,
+                   rendezVousAvance[i].heure,
+                   nom_patient,
+                   rendezVousAvance[i].statut);
+        }
+    }
+
+    if (compteur == 0)
+    {
+        printf("Aucun rendez-vous trouve.\n");
+    }
+    else
+    {
+        printf("\nTotal: %d rendez-vous\n", compteur);
+    }
+
+    pause();
+}
+
 void gererDisponibilitesMedecin(int id_medecin)
 {
     int choix;
-    do {
+    do
+    {
         system("cls");
         printf("\n=== GESTION DES DISPONIBILITES ===\n");
         printf("1. Generer creneaux pour un jour\n");
@@ -339,8 +431,10 @@ void gererDisponibilitesMedecin(int id_medecin)
         scanf("%d", &choix);
         viderBuffer();
 
-        switch(choix) {
-            case 1: {
+        switch(choix)
+        {
+            case 1:
+            {
                 char date[20];
                 printf("Date (JJ/MM/AAAA): ");
                 fgets(date, 20, stdin);
@@ -349,7 +443,8 @@ void gererDisponibilitesMedecin(int id_medecin)
                 pause();
                 break;
             }
-            case 2: {
+            case 2:
+            {
                 char date[20];
                 printf("Date debut (JJ/MM/AAAA): ");
                 fgets(date, 20, stdin);
@@ -358,7 +453,8 @@ void gererDisponibilitesMedecin(int id_medecin)
                 pause();
                 break;
             }
-            case 3: {
+            case 3:
+            {
                 char date[20];
                 printf("Date (JJ/MM/AAAA): ");
                 fgets(date, 20, stdin);
@@ -375,9 +471,13 @@ void gererDisponibilitesMedecin(int id_medecin)
 void menuRendezVousAvance()
 {
     int choix;
-    do {
+    do
+    {
         system("cls");
-        printf("\n=== RENDEZ-VOUS AVANCE ===\n");
+        color(13, 0);
+        printf("\n=== RENDEZ-VOUS AVANCE ===\n\n");
+        color(7, 0);
+
         printf("1. Prendre rendez-vous\n");
         printf("2. Gerer disponibilites d'un medecin\n");
         printf("3. Voir planning d'un medecin\n");
@@ -387,11 +487,13 @@ void menuRendezVousAvance()
         scanf("%d", &choix);
         viderBuffer();
 
-        switch(choix) {
+        switch(choix)
+        {
             case 1:
                 prendreRendezVousAvance();
                 break;
-            case 2: {
+            case 2:
+            {
                 int id;
                 printf("ID Medecin: ");
                 scanf("%d", &id);
@@ -399,7 +501,8 @@ void menuRendezVousAvance()
                 gererDisponibilitesMedecin(id);
                 break;
             }
-            case 3: {
+            case 3:
+            {
                 int id;
                 char date[20];
                 printf("ID Medecin: ");
@@ -411,7 +514,8 @@ void menuRendezVousAvance()
                 afficherPlanningMedecin(id, date);
                 break;
             }
-            case 4: {
+            case 4:
+            {
                 int id;
                 printf("ID Rendez-vous: ");
                 scanf("%d", &id);
