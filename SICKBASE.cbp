@@ -72,10 +72,18 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="fichiers_relations.h" />
+		<Unit filename="infirmier.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="infirmier.h" />
 		<Unit filename="interventions.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="interventions.h" />
+		<Unit filename="laboratoire.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="laboratoire.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -91,10 +99,18 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="personnel.h" />
+		<Unit filename="pharmacie.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pharmacie.h" />
 		<Unit filename="rdv_avance.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="rdv_avance.h" />
+		<Unit filename="recuperation.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="recuperation.h" />
 		<Unit filename="utils.c">
 			<Option compilerVar="CC" />
 		</Unit>
