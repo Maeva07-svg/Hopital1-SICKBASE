@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1775408321 source:c:\users\maeva\desktop\projet info c\sickbase\main.c
+1776627469 source:c:\users\maeva\desktop\projet info c\sickbase\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -16,10 +16,14 @@
 	"archives.h"
 	"fichiers.h"
 	"fichiers_personnel.h"
+	"infirmier.h"
 	"fichiers_relations.h"
 	"fichiers_rdv.h"
 	"rdv_avance.h"
+	"pharmacie.h"
 	"facturation.h"
+	"laboratoire.h"
+	"recuperation.h"
 
 1771702894 source:c:\users\maeva\desktop\projet info c\sickbase\utils.c
 	<stdio.h>
@@ -123,7 +127,7 @@
 	"patient.h"
 	"personnel.h"
 
-1771771656 c:\users\maeva\desktop\projet info c\sickbase\ordonnances.h
+1776463581 c:\users\maeva\desktop\projet info c\sickbase\ordonnances.h
 	"utils.h"
 	"patient.h"
 	"personnel.h"
@@ -244,7 +248,7 @@
 	"personnel.h"
 	"consultations.h"
 
-1775337182 source:c:\users\maeva\desktop\projet info c\sickbase\rdv_avance.c
+1776008082 source:c:\users\maeva\desktop\projet info c\sickbase\rdv_avance.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -274,4 +278,73 @@
 	"patient.h"
 	"personnel.h"
 	"consultations.h"
+
+1776626296 c:\users\maeva\desktop\projet info c\sickbase\laboratoire.h
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+
+1776626697 source:c:\users\maeva\desktop\projet info c\sickbase\laboratoire.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"laboratoire.h"
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+	"consultations.h"
+	"comptes.h"
+
+1776463070 c:\users\maeva\desktop\projet info c\sickbase\pharmacie.h
+	"utils.h"
+	"patient.h"
+	"ordonnances.h"
+
+1776466542 source:c:\users\maeva\desktop\projet info c\sickbase\pharmacie.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"pharmacie.h"
+	"utils.h"
+	"patient.h"
+	"ordonnances.h"
+	"comptes.h"
+
+1776546848 source:c:\users\maeva\desktop\projet info c\sickbase\infirmier.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"infirmier.h"
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+	"consultations.h"
+	"comptes.h"
+
+1776546767 c:\users\maeva\desktop\projet info c\sickbase\infirmier.h
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+	"consultations.h"
+	"interventions.h"
+
+1776621899 c:\users\maeva\desktop\projet info c\sickbase\recuperation.h
+	"utils.h"
+	"comptes.h"
+
+1776624084 source:c:\users\maeva\desktop\projet info c\sickbase\recuperation.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"recuperation.h"
+	"utils.h"
+	"comptes.h"
 
