@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1776627469 source:c:\users\maeva\desktop\projet info c\sickbase\main.c
+1777231195 source:c:\users\maeva\desktop\projet info c\sickbase\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -24,6 +24,9 @@
 	"facturation.h"
 	"laboratoire.h"
 	"recuperation.h"
+	"administration.h"
+	"notification.h"
+	"messagerie.h"
 
 1771702894 source:c:\users\maeva\desktop\projet info c\sickbase\utils.c
 	<stdio.h>
@@ -284,7 +287,7 @@
 	"patient.h"
 	"personnel.h"
 
-1776626697 source:c:\users\maeva\desktop\projet info c\sickbase\laboratoire.c
+1776629451 source:c:\users\maeva\desktop\projet info c\sickbase\laboratoire.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -314,7 +317,7 @@
 	"ordonnances.h"
 	"comptes.h"
 
-1776546848 source:c:\users\maeva\desktop\projet info c\sickbase\infirmier.c
+1777214535 source:c:\users\maeva\desktop\projet info c\sickbase\infirmier.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -327,24 +330,87 @@
 	"consultations.h"
 	"comptes.h"
 
-1776546767 c:\users\maeva\desktop\projet info c\sickbase\infirmier.h
+1777185578 c:\users\maeva\desktop\projet info c\sickbase\infirmier.h
 	"utils.h"
 	"patient.h"
 	"personnel.h"
 	"consultations.h"
 	"interventions.h"
 
-1776621899 c:\users\maeva\desktop\projet info c\sickbase\recuperation.h
+1777229151 c:\users\maeva\desktop\projet info c\sickbase\recuperation.h
 	"utils.h"
 	"comptes.h"
 
-1776624084 source:c:\users\maeva\desktop\projet info c\sickbase\recuperation.c
+1777229251 source:c:\users\maeva\desktop\projet info c\sickbase\recuperation.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<ctype.h>
 	<time.h>
 	"recuperation.h"
+	"utils.h"
+	"comptes.h"
+
+1777178960 c:\users\maeva\desktop\projet info c\sickbase\administration.h
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+	"consultations.h"
+	"ordonnances.h"
+	"interventions.h"
+	"facturation.h"
+	"laboratoire.h"
+	"pharmacie.h"
+	"infirmier.h"
+	"comptes.h"
+
+1777185467 source:c:\users\maeva\desktop\projet info c\sickbase\administration.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"administration.h"
+	"utils.h"
+	"patient.h"
+	"personnel.h"
+	"consultations.h"
+	"ordonnances.h"
+	"interventions.h"
+	"facturation.h"
+	"laboratoire.h"
+	"pharmacie.h"
+	"infirmier.h"
+	"diagnostic.h"
+	"comptes.h"
+
+1777216121 c:\users\maeva\desktop\projet info c\sickbase\notification.h
+	"utils.h"
+	"comptes.h"
+
+1777228957 c:\users\maeva\desktop\projet info c\sickbase\messagerie.h
+	"utils.h"
+	"comptes.h"
+	"notification.h"
+
+1777231068 source:c:\users\maeva\desktop\projet info c\sickbase\notification.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"notification.h"
+	"utils.h"
+	"comptes.h"
+
+1777231277 source:c:\users\maeva\desktop\projet info c\sickbase\messagerie.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"messagerie.h"
+	"notification.h"
 	"utils.h"
 	"comptes.h"
 

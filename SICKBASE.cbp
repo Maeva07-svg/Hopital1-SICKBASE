@@ -32,6 +32,10 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="Makefile.mak" />
+		<Unit filename="administration.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="administration.h" />
 		<Unit filename="archives.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -87,6 +91,14 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="messagerie.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="messagerie.h" />
+		<Unit filename="notification.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="notification.h" />
 		<Unit filename="ordonnances.c">
 			<Option compilerVar="CC" />
 		</Unit>

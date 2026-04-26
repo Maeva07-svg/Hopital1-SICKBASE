@@ -35,5 +35,6 @@ void definirQuestionsSecurite(int id_compte);
 int verifierReponsesSecurite(int id_compte);
 void reinitialiserMotDePasse(int id_compte);
 void menuMotDePasseOublie();
+void sauvegarderReponsesSecurite();
 
 #endif

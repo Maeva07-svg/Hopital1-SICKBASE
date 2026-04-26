@@ -22,6 +22,9 @@
 #include "facturation.h"
 #include "laboratoire.h"
 #include "recuperation.h"
+#include "administration.h"
+#include "notification.h"
+#include "messagerie.h"
 
 // Déclaration des fonctions externes
 void menuGestionPatients();
@@ -101,6 +104,9 @@ void afficherMenuPrincipal()
         completerDossierPatient(utilisateur_actuel->id_compte);
     }
 
+    chargerNotifications();
+    chargerMessages();
+
     int choix;
     do
     {
@@ -138,12 +144,26 @@ void afficherMenuPrincipal()
             printf("Super Administrateur\n");
             break;
         }
-        printf("----------------------------------------\n\n");
+        printf("----------------------------------------\n");
+
+        // Afficher les notifications non lues et nouveaux messages
+        if (hasNotificationsNonLues(utilisateur_actuel->id_compte))
+        {
+            color(11, 0);
+            printf(" Vous avez des notifications non lues!\n");
+            color(7, 0);
+        }
+        if (hasNouveauxMessages(utilisateur_actuel->id_compte))
+        {
+            color(11, 0);
+            printf(" Vous avez des nouveaux messages!\n");
+            color(7, 0);
+        }
 
         switch(utilisateur_actuel->profil)
         {
         case ROLE_PATIENT:
-            printf("1. Voir mon dossier medical\n");
+            printf("\n1. Voir mon dossier medical\n");
             printf("2. Voir mes consultations\n");
             printf("3. Voir mes ordonnances\n");
             printf("4. Voir mes analyses\n");
@@ -152,13 +172,15 @@ void afficherMenuPrincipal()
             printf("7. Annuler un rendez-vous\n");
             printf("8. Voir mes factures\n");
             printf("9. Payer une facture\n");
-            printf("10. Questions de securite\n");
-            printf("11. Modifier mon mot de passe\n");
-            printf("12. Deconnexion\n");
+            printf("10. Messagerie\n");
+            printf("11. Notifications\n");
+            printf("12. Questions de securite\n");
+            printf("13. Modifier mon mot de passe\n");
+            printf("14. Deconnexion\n");
             break;
 
         case ROLE_MEDECIN:
-            printf("1. Gestion des patients\n");
+            printf("\n1. Gestion des patients\n");
             printf("2. Consultations\n");
             printf("3. Prescriptions\n");
             printf("4. Diagnostic medical\n");
@@ -167,24 +189,28 @@ void afficherMenuPrincipal()
             printf("7. Mes rendez-vous\n");
             printf("8. Facturation\n");
             printf("9. Demandes d'analyses\n");
-            printf("10. Statistiques\n");
-            printf("11. Questions de securite\n");
-            printf("12. Modifier mot de passe\n");
-            printf("13. Deconnexion\n");
+            printf("10. Messagerie\n");
+            printf("11. Notifications\n");
+            printf("12. Statistiques\n");
+            printf("13. Questions de securite\n");
+            printf("14. Modifier mot de passe\n");
+            printf("15. Deconnexion\n");
             break;
 
         case ROLE_INFIRMIER:
-            printf("1. Liste des patients\n");
+            printf("\n1. Liste des patients\n");
             printf("2. Soins a administrer\n");
             printf("3. Constantes vitales\n");
             printf("4. Planning des soins\n");
-            printf("5. Questions de securite\n");
-            printf("6. Modifier mot de passe\n");
-            printf("7. Deconnexion\n");
+            printf("5. Messagerie\n");
+            printf("6. Notifications\n");
+            printf("7. Questions de securite\n");
+            printf("8. Modifier mot de passe\n");
+            printf("9. Deconnexion\n");
             break;
 
         case ROLE_ADMINISTRATEUR:
-            printf("1. Gestion des patients\n");
+            printf("\n1. Gestion des patients\n");
             printf("2. Gestion du personnel\n");
             printf("3. Gestion des rendez-vous\n");
             printf("4. Gestion des consultations\n");
@@ -192,32 +218,38 @@ void afficherMenuPrincipal()
             printf("6. Facturation\n");
             printf("7. Archives\n");
             printf("8. Statistiques\n");
-            printf("9. Questions de securite\n");
-            printf("10. Modifier mot de passe\n");
-            printf("11. Deconnexion\n");
+            printf("9. Messagerie\n");
+            printf("10. Notifications\n");
+            printf("11. Questions de securite\n");
+            printf("12. Modifier mot de passe\n");
+            printf("13. Deconnexion\n");
             break;
 
         case ROLE_TECHNICIEN_LABO:
-            printf("1. Liste des analyses a realiser\n");
+            printf("\n1. Liste des analyses a realiser\n");
             printf("2. Saisir resultats d'analyses\n");
             printf("3. Consulter historique analyses\n");
-            printf("4. Questions de securite\n");
-            printf("5. Modifier mot de passe\n");
-            printf("6. Deconnexion\n");
+            printf("4. Messagerie\n");
+            printf("5. Notifications\n");
+            printf("6. Questions de securite\n");
+            printf("7. Modifier mot de passe\n");
+            printf("8. Deconnexion\n");
             break;
 
         case ROLE_PHARMACIEN:
-            printf("1. Gestion des ordonnances\n");
+            printf("\n1. Gestion des ordonnances\n");
             printf("2. Gestion du stock\n");
             printf("3. Delivrance medicaments\n");
             printf("4. Alertes stock faible\n");
-            printf("5. Questions de securite\n");
-            printf("6. Modifier mot de passe\n");
-            printf("7. Deconnexion\n");
+            printf("5. Messagerie\n");
+            printf("6. Notifications\n");
+            printf("7. Questions de securite\n");
+            printf("8. Modifier mot de passe\n");
+            printf("9. Deconnexion\n");
             break;
 
         case ROLE_SUPER_ADMIN:
-            printf("1. Gestion complete patients\n");
+            printf("\n1. Gestion complete patients\n");
             printf("2. Gestion complete personnel\n");
             printf("3. Gestion consultations\n");
             printf("4. Gestion ordonnances\n");
@@ -229,9 +261,11 @@ void afficherMenuPrincipal()
             printf("10. Statistiques avancees\n");
             printf("11. Configuration systeme\n");
             printf("12. Gestion des rendez-vous\n");
-            printf("13. Questions de securite\n");
-            printf("14. Modifier mot de passe\n");
-            printf("15. Deconnexion\n");
+            printf("13. Messagerie\n");
+            printf("14. Notifications\n");
+            printf("15. Questions de securite\n");
+            printf("16. Modifier mot de passe\n");
+            printf("17. Deconnexion\n");
             break;
         }
 
@@ -266,9 +300,8 @@ void afficherMenuPrincipal()
             case 3:
                 afficherOrdonnancesPatient(utilisateur_actuel->id_associe);
                 break;
-            case 4:  // Voir mes analyses
+            case 4:
                 menuPatientLaboratoire();
-                break;
                 break;
             case 5:
                 prendreRendezVousAvance();
@@ -318,13 +351,19 @@ void afficherMenuPrincipal()
             }
             break;
             case 10:
-                definirQuestionsSecurite(utilisateur_actuel->id_compte);
+                menuMessagerie(utilisateur_actuel->id_compte);
                 break;
             case 11:
+                afficherNotifications(utilisateur_actuel->id_compte);
+                break;
+            case 12:
+                definirQuestionsSecurite(utilisateur_actuel->id_compte);
+                break;
+            case 13:
                 modifierMotDePasse(utilisateur_actuel->id_compte);
                 pause();
                 break;
-            case 12:
+            case 14:
                 logout();
                 return;
             default:
@@ -384,21 +423,27 @@ void afficherMenuPrincipal()
             case 8:
                 menuFacturation();
                 break;
-            case 9:  // Demandes d'analyses
+            case 9:
                 menuMedecinLaboratoire();
                 break;
             case 10:
+                menuMessagerie(utilisateur_actuel->id_compte);
+                break;
+            case 11:
+                afficherNotifications(utilisateur_actuel->id_compte);
+                break;
+            case 12:
                 printf("\nStatistiques medicales en developpement...\n");
                 pause();
                 break;
-            case 11:
+            case 13:
                 definirQuestionsSecurite(utilisateur_actuel->id_compte);
                 break;
-            case 12:
+            case 14:
                 modifierMotDePasse(utilisateur_actuel->id_compte);
                 pause();
                 break;
-            case 13:
+            case 15:
                 logout();
                 return;
             default:
@@ -424,13 +469,19 @@ void afficherMenuPrincipal()
                 menuPlanningInfirmier();
                 break;
             case 5:
-                definirQuestionsSecurite(utilisateur_actuel->id_compte);
+                menuMessagerie(utilisateur_actuel->id_compte);
                 break;
             case 6:
+                afficherNotifications(utilisateur_actuel->id_compte);
+                break;
+            case 7:
+                definirQuestionsSecurite(utilisateur_actuel->id_compte);
+                break;
+            case 8:
                 modifierMotDePasse(utilisateur_actuel->id_compte);
                 pause();
                 break;
-            case 7:
+            case 9:
                 logout();
                 return;
             default:
@@ -464,17 +515,22 @@ void afficherMenuPrincipal()
                 menuArchives();
                 break;
             case 8:
-                printf("\nStatistiques administratives en developpement...\n");
-                pause();
+                statistiquesAvancees();
                 break;
             case 9:
-                definirQuestionsSecurite(utilisateur_actuel->id_compte);
+                menuMessagerie(utilisateur_actuel->id_compte);
                 break;
             case 10:
+                afficherNotifications(utilisateur_actuel->id_compte);
+                break;
+            case 11:
+                definirQuestionsSecurite(utilisateur_actuel->id_compte);
+                break;
+            case 12:
                 modifierMotDePasse(utilisateur_actuel->id_compte);
                 pause();
                 break;
-            case 11:
+            case 13:
                 logout();
                 return;
             default:
@@ -487,16 +543,12 @@ void afficherMenuPrincipal()
             switch(choix)
             {
             case 1:
-                // Liste des analyses à réaliser
                 system("cls");
                 afficherAnalysesARealiser();
                 break;
-
             case 2:
-                // Saisir résultats d'analyses
                 system("cls");
                 printf("\n=== SAISIE DES RESULTATS D'ANALYSES ===\n\n");
-
                 {
                     int compteur = 0;
                     int ids_analyse[MAX_ANALYSES];
@@ -510,14 +562,12 @@ void afficherMenuPrincipal()
                         {
                             ids_analyse[compteur] = analyses[i].id_analyse;
                             compteur++;
-
                             int idx_patient = rechercherParID(analyses[i].id_patient);
                             char patient_nom[30] = "";
                             if (idx_patient != -1)
                                 sprintf(patient_nom, "%s %s", patients[idx_patient].prenom, patients[idx_patient].nom);
                             else
                                 sprintf(patient_nom, "ID %d", analyses[i].id_patient);
-
                             char type_nom[100] = "Inconnu";
                             for (int j = 0; j < nombreTypesAnalyse; j++)
                             {
@@ -527,7 +577,6 @@ void afficherMenuPrincipal()
                                     break;
                                 }
                             }
-
                             printf("%-4d| %-23s | %-19s | %-12s\n",
                                    analyses[i].id_analyse,
                                    patient_nom,
@@ -535,7 +584,6 @@ void afficherMenuPrincipal()
                                    analyses[i].date_demande);
                         }
                     }
-
                     if (compteur == 0)
                     {
                         printf("Aucune analyse en cours.\n");
@@ -543,12 +591,10 @@ void afficherMenuPrincipal()
                         pause();
                         break;
                     }
-
                     printf("\nEntrez l'ID de l'analyse pour saisir les resultats (0 pour quitter): ");
                     int id;
                     scanf("%d", &id);
                     viderBuffer();
-
                     int trouve = 0;
                     for (int i = 0; i < compteur; i++)
                     {
@@ -558,7 +604,6 @@ void afficherMenuPrincipal()
                             break;
                         }
                     }
-
                     if (trouve)
                     {
                         saisirResultatAnalyse(id);
@@ -570,133 +615,126 @@ void afficherMenuPrincipal()
                     }
                 }
                 break;
-
             case 3:
-                // Consulter historique analyses
-            {
-                int choix_histo;
-                system("cls");
-                printf("\n=== HISTORIQUE DES ANALYSES ===\n\n");
-                printf("1. Consulter une analyse specifique\n");
-                printf("2. Voir toutes les analyses realisees\n");
-                printf("3. Voir toutes les analyses validees\n");
-                printf("4. Statistiques du laboratoire\n");
-                printf("5. Retour\n");
-                printf("\nVotre choix: ");
-                scanf("%d", &choix_histo);
-                viderBuffer();
-
-                if (choix_histo == 1)
                 {
-                    printf("ID de l'analyse: ");
-                    int id;
-                    scanf("%d", &id);
+                    int choix_histo;
+                    system("cls");
+                    printf("\n=== HISTORIQUE DES ANALYSES ===\n\n");
+                    printf("1. Consulter une analyse specifique\n");
+                    printf("2. Voir toutes les analyses realisees\n");
+                    printf("3. Voir toutes les analyses validees\n");
+                    printf("4. Statistiques du laboratoire\n");
+                    printf("5. Retour\n");
+                    printf("\nVotre choix: ");
+                    scanf("%d", &choix_histo);
                     viderBuffer();
-                    afficherAnalyse(id);
-                    pause();
-                }
-                else if (choix_histo == 2)
-                {
-                    system("cls");
-                    printf("\n=== ANALYSES REALISEES ===\n\n");
-                    printf("ID  | Patient                 | Type                | Date       | Statut\n");
-                    printf("----|-------------------------|---------------------|------------|-----------\n");
-
-                    for (int i = 0; i < nombreAnalyses; i++)
+                    if (choix_histo == 1)
                     {
-                        if (strcmp(analyses[i].statut, "Réalisée") == 0 || strcmp(analyses[i].statut, "Validée") == 0)
-                        {
-                            int idx_patient = rechercherParID(analyses[i].id_patient);
-                            char patient_nom[30] = "";
-                            if (idx_patient != -1)
-                                sprintf(patient_nom, "%s %s", patients[idx_patient].prenom, patients[idx_patient].nom);
-                            else
-                                sprintf(patient_nom, "ID %d", analyses[i].id_patient);
-
-                            char type_nom[100] = "Inconnu";
-                            for (int j = 0; j < nombreTypesAnalyse; j++)
-                            {
-                                if (types_analyse[j].id_type == analyses[i].id_type_analyse)
-                                {
-                                    strcpy(type_nom, types_analyse[j].nom);
-                                    break;
-                                }
-                            }
-
-                            printf("%-4d| %-23s | %-19s | %-10s | %s\n",
-                                   analyses[i].id_analyse,
-                                   patient_nom,
-                                   type_nom,
-                                   analyses[i].date_demande,
-                                   analyses[i].statut);
-                        }
+                        printf("ID de l'analyse: ");
+                        int id;
+                        scanf("%d", &id);
+                        viderBuffer();
+                        afficherAnalyse(id);
+                        pause();
                     }
-                    pause();
-                }
-                else if (choix_histo == 3)
-                {
-                    system("cls");
-                    printf("\n=== ANALYSES VALIDEES ===\n\n");
-                    printf("ID  | Patient                 | Type                | Date resultat\n");
-                    printf("----|-------------------------|---------------------|------------------\n");
-
-                    for (int i = 0; i < nombreAnalyses; i++)
+                    else if (choix_histo == 2)
                     {
-                        if (strcmp(analyses[i].statut, "Validée") == 0)
+                        system("cls");
+                        printf("\n=== ANALYSES REALISEES ===\n\n");
+                        printf("ID  | Patient                 | Type                | Date       | Statut\n");
+                        printf("----|-------------------------|---------------------|------------|-----------\n");
+                        for (int i = 0; i < nombreAnalyses; i++)
                         {
-                            int idx_patient = rechercherParID(analyses[i].id_patient);
-                            char patient_nom[30] = "";
-                            if (idx_patient != -1)
-                                sprintf(patient_nom, "%s %s", patients[idx_patient].prenom, patients[idx_patient].nom);
-                            else
-                                sprintf(patient_nom, "ID %d", analyses[i].id_patient);
-
-                            char type_nom[100] = "Inconnu";
-                            for (int j = 0; j < nombreTypesAnalyse; j++)
+                            if (strcmp(analyses[i].statut, "Réalisée") == 0 || strcmp(analyses[i].statut, "Validée") == 0)
                             {
-                                if (types_analyse[j].id_type == analyses[i].id_type_analyse)
+                                int idx_patient = rechercherParID(analyses[i].id_patient);
+                                char patient_nom[30] = "";
+                                if (idx_patient != -1)
+                                    sprintf(patient_nom, "%s %s", patients[idx_patient].prenom, patients[idx_patient].nom);
+                                else
+                                    sprintf(patient_nom, "ID %d", analyses[i].id_patient);
+                                char type_nom[100] = "Inconnu";
+                                for (int j = 0; j < nombreTypesAnalyse; j++)
                                 {
-                                    strcpy(type_nom, types_analyse[j].nom);
-                                    break;
+                                    if (types_analyse[j].id_type == analyses[i].id_type_analyse)
+                                    {
+                                        strcpy(type_nom, types_analyse[j].nom);
+                                        break;
+                                    }
                                 }
+                                printf("%-4d| %-23s | %-19s | %-10s | %s\n",
+                                       analyses[i].id_analyse,
+                                       patient_nom,
+                                       type_nom,
+                                       analyses[i].date_demande,
+                                       analyses[i].statut);
                             }
-
-                            printf("%-4d| %-23s | %-19s | %-12s\n",
-                                   analyses[i].id_analyse,
-                                   patient_nom,
-                                   type_nom,
-                                   analyses[i].date_resultat);
                         }
+                        pause();
                     }
-                    pause();
+                    else if (choix_histo == 3)
+                    {
+                        system("cls");
+                        printf("\n=== ANALYSES VALIDEES ===\n\n");
+                        printf("ID  | Patient                 | Type                | Date resultat\n");
+                        printf("----|-------------------------|---------------------|------------------\n");
+                        for (int i = 0; i < nombreAnalyses; i++)
+                        {
+                            if (strcmp(analyses[i].statut, "Validée") == 0)
+                            {
+                                int idx_patient = rechercherParID(analyses[i].id_patient);
+                                char patient_nom[30] = "";
+                                if (idx_patient != -1)
+                                    sprintf(patient_nom, "%s %s", patients[idx_patient].prenom, patients[idx_patient].nom);
+                                else
+                                    sprintf(patient_nom, "ID %d", analyses[i].id_patient);
+                                char type_nom[100] = "Inconnu";
+                                for (int j = 0; j < nombreTypesAnalyse; j++)
+                                {
+                                    if (types_analyse[j].id_type == analyses[i].id_type_analyse)
+                                    {
+                                        strcpy(type_nom, types_analyse[j].nom);
+                                        break;
+                                    }
+                                }
+                                printf("%-4d| %-23s | %-19s | %-12s\n",
+                                       analyses[i].id_analyse,
+                                       patient_nom,
+                                       type_nom,
+                                       analyses[i].date_resultat);
+                            }
+                        }
+                        pause();
+                    }
+                    else if (choix_histo == 4)
+                    {
+                        statistiquesLaboratoire();
+                    }
                 }
-                else if (choix_histo == 4)
-                {
-                    statistiquesLaboratoire();
-                }
-            }
-            break;
-
+                break;
             case 4:
-                // Questions de sécurité
+                menuMessagerie(utilisateur_actuel->id_compte);
+                break;
+            case 5:
+                afficherNotifications(utilisateur_actuel->id_compte);
+                break;
+            case 6:
                 definirQuestionsSecurite(utilisateur_actuel->id_compte);
                 break;
-
-            case 5:
+            case 7:
                 modifierMotDePasse(utilisateur_actuel->id_compte);
                 printf("Mot de passe modifie avec succes.\n");
                 pause();
                 break;
-
-            case 6:
+            case 8:
                 logout();
                 return;
-
             default:
                 printf("Choix invalide.\n");
                 pause();
             }
             break;
+
         case ROLE_PHARMACIEN:
             switch(choix)
             {
@@ -729,13 +767,19 @@ void afficherMenuPrincipal()
                 alerteStockFaible();
                 break;
             case 5:
-                definirQuestionsSecurite(utilisateur_actuel->id_compte);
+                menuMessagerie(utilisateur_actuel->id_compte);
                 break;
             case 6:
+                afficherNotifications(utilisateur_actuel->id_compte);
+                break;
+            case 7:
+                definirQuestionsSecurite(utilisateur_actuel->id_compte);
+                break;
+            case 8:
                 modifierMotDePasse(utilisateur_actuel->id_compte);
                 pause();
                 break;
-            case 7:
+            case 9:
                 logout();
                 return;
             default:
@@ -772,28 +816,31 @@ void afficherMenuPrincipal()
                 menuArchives();
                 break;
             case 9:
-                // Gestion du laboratoire (Admin)
                 menuAdminLaboratoire();
                 break;
             case 10:
-                printf("\nStatistiques avancees en developpement...\n");
-                pause();
+                statistiquesAvancees();
                 break;
             case 11:
-                printf("\nConfiguration systeme en developpement...\n");
-                pause();
+                configurationSysteme();
                 break;
             case 12:
                 menuRendezVousAvance();
                 break;
             case 13:
-                definirQuestionsSecurite(utilisateur_actuel->id_compte);
+                menuMessagerie(utilisateur_actuel->id_compte);
                 break;
             case 14:
+                afficherNotifications(utilisateur_actuel->id_compte);
+                break;
+            case 15:
+                definirQuestionsSecurite(utilisateur_actuel->id_compte);
+                break;
+            case 16:
                 modifierMotDePasse(utilisateur_actuel->id_compte);
                 pause();
                 break;
-            case 15:
+            case 17:
                 logout();
                 return;
             default:
@@ -801,6 +848,7 @@ void afficherMenuPrincipal()
                 pause();
             }
             break;
+
         default:
             printf("Profil non reconnu.\n");
             pause();
@@ -1148,6 +1196,14 @@ int main()
     initialiserRecuperation();
     printf("OK\n");
 
+    printf("  - Initialisation des notifications... ");
+    initialiserNotifications();
+    printf("OK\n");
+
+    printf("  - Initialisation de la messagerie... ");
+    initialiserMessagerie();
+    printf("OK\n");
+
     // Chargement des donnees
     printf("\nCHARGEMENT DES DONNEES...\n");
 
@@ -1191,6 +1247,14 @@ int main()
     printf("  - Chargement des comptes... ");
     chargerComptes();
     printf("%d compte(s) actif(s)\n", nombreComptes);
+
+    printf("  - Chargement des notifications... ");
+    chargerNotifications();
+    printf("OK\n");
+
+    printf("  - Chargement des messages... ");
+    chargerMessages();
+    printf("OK\n");
 
     printf("\n========================================\n");
     printf("SYSTEME PRET.\n");
@@ -1244,6 +1308,8 @@ int main()
             sauvegarderSoins();
             sauvegarderPlannings();
             sauvegarderReponsesSecurite();
+            sauvegarderNotifications();
+            sauvegarderMessages();
             return 0;
 
         default:

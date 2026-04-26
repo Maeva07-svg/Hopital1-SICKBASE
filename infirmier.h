@@ -31,6 +31,7 @@ typedef struct
 } ConstanteVital;
 
 // Structure pour les soins à administrer
+// Structure pour les soins prescrits par le médecin
 typedef struct
 {
     int id_soin;
@@ -39,12 +40,12 @@ typedef struct
     int id_infirmier_realisateur;
     char date_prescription[20];
     char date_realisation[20];
-    char type_soin[100];     // Pansement, Injection, Prise de sang, etc.
+    char type_soin[100];
     char description[300];
-    char posologie[200];
-    char frequence[100];      // Matin/Soir, Toutes les X heures
-    char statut[20];          // "Prescrit", "En attente", "Réalisé", "Reporté"
-    char priorite[20];        // "Normale", "Urgente", "Très urgente"
+    char instructions[300];
+    char frequence[100];
+    char statut[20];
+    char priorite[20];
     char notes[300];
 } Soin;
 
@@ -77,16 +78,17 @@ void afficherHistoriqueConstantes(int id_patient);
 void afficherDernieresConstantes(int id_patient);
 void modifierConstantes(int id_constante);
 
-// Prototypes - Soins
+// Prototypes - Prescription de soins (Médecin)
 void prescrireSoin(int id_patient, int id_medecin);
 void modifierPrescriptionSoin(int id_soin);
 void annulerPrescriptionSoin(int id_soin);
-void afficherSoinsAPreparer();
-void afficherSoinsARealiser();
+void afficherPrescriptionsMedecin(int id_medecin);
+
+// Prototypes - Soins (Infirmier)
+void afficherSoinsARealiser();      // Soins prescrits par les medecins
 void realiserSoin(int id_soin);
-void reporterSoin(int id_soin);
+void afficherSoinsRealises();
 void afficherSoinsParPatient(int id_patient);
-void afficherSoinsParMedecin(int id_medecin);
 
 // Prototypes - Planning
 void planifierSoin(int id_soin);

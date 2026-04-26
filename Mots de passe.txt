@@ -18,6 +18,9 @@ Medecin
 Login: medecin_1_Diallo
 Mot de Passe: change_me
 
+Login: medecin_8_Albert
+Mot de Passe: change_me
+
 Infirmier 
 Login: infirmier_2_Kara
 Mot de passe: change_me
