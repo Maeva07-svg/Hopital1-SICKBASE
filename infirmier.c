@@ -98,20 +98,15 @@ void saisirConstantesVitales(int id_patient)
 
     sauvegarderConstantes();
 
-    printf("\n=== CONSTANTES ENREGISTREES AVEC SUCCES ===\n");
+    printf("\n=== CONSTANTES ENREGISTREES ===\n");
+    printf("Temperature: %.1f °C\n", c.temperature);
+    printf("Tension: %d/%d mmHg\n", c.tension_systolique, c.tension_diastolique);
+    printf("Pouls: %d bpm\n", c.pouls);
 
-    // Afficher un résumé
-    printf("\nResume des mesures:\n");
-    printf("  Temperature: %.1f °C\n", c.temperature);
-    printf("  Tension: %d/%d mmHg\n", c.tension_systolique, c.tension_diastolique);
-    printf("  Pouls: %d bpm\n", c.pouls);
-    printf("  Saturation: %d %%\n", c.saturation);
-
-    // Alertes si valeurs anormales
     if (c.temperature > 38.5)
         color(12, 0), printf("\n⚠️ ALERTE: Fievre elevee!\n"), color(7,0);
     if (c.tension_systolique > 160 || c.tension_diastolique > 100)
-        color(12, 0), printf("\n⚠️ ALERTE: Hypertension arterielle!\n"), color(7,0);
+        color(12, 0), printf("\n⚠️ ALERTE: Hypertension!\n"), color(7,0);
     if (c.pouls > 120)
         color(12, 0), printf("\n⚠️ ALERTE: Tachycardie!\n"), color(7,0);
     if (c.saturation < 90)
@@ -149,7 +144,7 @@ void afficherHistoriqueConstantes(int id_patient)
 
     if (compteur == 0)
     {
-        printf("Aucune constante enregistree pour ce patient.\n");
+        printf("Aucune constante enregistree.\n");
     }
     else
     {
@@ -185,7 +180,7 @@ void afficherHistoriqueConstantes(int id_patient)
     pause();
 }
 
-// ================= SOINS =================
+// ================= PRESCRIPTION DE SOINS (MÉDECIN) =================
 
 void prescrireSoin(int id_patient, int id_medecin)
 {
@@ -214,19 +209,19 @@ void prescrireSoin(int id_patient, int id_medecin)
     struct tm tm = *localtime(&t);
     sprintf(s.date_prescription, "%02d/%02d/%04d", tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900);
 
-    printf("Type de soin (Pansement/Injection/Prelevement/Perfusion/etc.): ");
+    printf("Type de soin (Pansement/Injection/Prelevement/Perfusion/Aide/Toilette): ");
     fgets(s.type_soin, 100, stdin);
     s.type_soin[strcspn(s.type_soin, "\n")] = '\0';
 
-    printf("Description: ");
+    printf("Description du soin: ");
     fgets(s.description, 300, stdin);
     s.description[strcspn(s.description, "\n")] = '\0';
 
-    printf("Posologie/Protocole: ");
-    fgets(s.posologie, 200, stdin);
-    s.posologie[strcspn(s.posologie, "\n")] = '\0';
+    printf("Instructions pour l'infirmier: ");
+    fgets(s.instructions, 300, stdin);
+    s.instructions[strcspn(s.instructions, "\n")] = '\0';
 
-    printf("Frequence (ex: Matin/Soir, Toutes les 6h): ");
+    printf("Frequence (ex: Matin/Soir, Une seule fois): ");
     fgets(s.frequence, 100, stdin);
     s.frequence[strcspn(s.frequence, "\n")] = '\0';
 
@@ -249,32 +244,23 @@ void prescrireSoin(int id_patient, int id_medecin)
     printf("ID Soin: %d\n", s.id_soin);
     printf("Type: %s\n", s.type_soin);
     printf("Priorite: %s\n", s.priorite);
-
-    // Proposer la planification
-    printf("\nVoulez-vous planifier ce soin? (O/N): ");
-    char rep;
-    scanf("%c", &rep);
-    viderBuffer();
-    if (toupper(rep) == 'O')
-    {
-        planifierSoin(s.id_soin);
-    }
+    printf("\n✅ Le soin a ete ajoute a la liste des soins a realiser par l'infirmier.\n");
 
     pause();
 }
 
-void afficherSoinsARealiser()
+void afficherPrescriptionsMedecin(int id_medecin)
 {
     system("cls");
-    printf("\n=== SOINS A REALISER ===\n\n");
+    printf("\n=== MES PRESCRIPTIONS DE SOINS ===\n\n");
 
     int compteur = 0;
-    printf("ID  | Patient                 | Type                | Priorite     | Statut\n");
-    printf("----|-------------------------|---------------------|--------------|------------\n");
+    printf("ID  | Patient                 | Type                | Date presc. | Statut\n");
+    printf("----|-------------------------|---------------------|-------------|-----------\n");
 
     for (int i = 0; i < nombreSoins; i++)
     {
-        if (strcmp(soins[i].statut, "Prescrit") == 0 || strcmp(soins[i].statut, "Planifie") == 0)
+        if (soins[i].id_medecin_prescripteur == id_medecin)
         {
             compteur++;
             int idx_patient = rechercherParID(soins[i].id_patient);
@@ -284,27 +270,106 @@ void afficherSoinsARealiser()
             else
                 sprintf(patient_nom, "ID %d", soins[i].id_patient);
 
+            printf("%-4d| %-23s | %-19s | %-11s | %s\n",
+                   soins[i].id_soin,
+                   patient_nom,
+                   soins[i].type_soin,
+                   soins[i].date_prescription,
+                   soins[i].statut);
+        }
+    }
+
+    if (compteur == 0)
+    {
+        printf("Aucune prescription de soin.\n");
+    }
+
+    pause();
+}
+
+// ================= SOINS À REALISER (INFIRMIER) =================
+
+void afficherSoinsARealiser()
+{
+
+    // Forcer le rechargement des donnees
+    chargerSoins();
+
+    system("cls");
+    printf("\n=== SOINS A REALISER ===\n\n");
+
+    // Vérifier s'il y a des soins enregistrés
+    if (nombreSoins == 0)
+    {
+        printf("Aucun soin enregistre dans le systeme.\n");
+        printf("Les soins apparaissent ici apres prescription par un medecin.\n");
+        pause();
+        return;
+    }
+
+    int compteur = 0;
+    printf("ID  | Patient                 | Type                | Prescrit par | Priorite\n");
+    printf("----|-------------------------|---------------------|--------------|------------\n");
+
+    for (int i = 0; i < nombreSoins; i++)
+    {
+        // Afficher les soins avec statut "Prescrit" (et pas encore realises)
+        if (strcmp(soins[i].statut, "Prescrit") == 0)
+        {
+            compteur++;
+
+            // Récupérer le nom du patient
+            int idx_patient = rechercherParID(soins[i].id_patient);
+            char patient_nom[30] = "";
+            if (idx_patient != -1)
+                sprintf(patient_nom, "%s %s", patients[idx_patient].prenom, patients[idx_patient].nom);
+            else
+                sprintf(patient_nom, "ID %d", soins[i].id_patient);
+
+            // Récupérer le nom du médecin prescripteur
+            int idx_medecin = rechercherEmployeParID(soins[i].id_medecin_prescripteur);
+            char medecin_nom[30] = "";
+            if (idx_medecin != -1)
+                sprintf(medecin_nom, "Dr %s", personnel[idx_medecin].nom);
+            else
+                sprintf(medecin_nom, "ID %d", soins[i].id_medecin_prescripteur);
+
             // Couleur selon priorite
             if (strcmp(soins[i].priorite, "Tres urgente") == 0)
-                color(12, 0);
+                color(12, 0);  // Rouge
             else if (strcmp(soins[i].priorite, "Urgente") == 0)
-                color(14, 0);
+                color(14, 0);  // Jaune
             else
-                color(7, 0);
+                color(7, 0);   // Blanc
 
             printf("%-4d| %-23s | %-19s | %-12s | %s\n",
                    soins[i].id_soin,
                    patient_nom,
                    soins[i].type_soin,
-                   soins[i].priorite,
-                   soins[i].statut);
+                   medecin_nom,
+                   soins[i].priorite);
             color(7, 0);
         }
     }
 
     if (compteur == 0)
     {
-        printf("Aucun soin a realiser.\n");
+        printf("Aucun soin a realiser pour le moment.\n");
+        printf("Les soins apparaissent ici apres prescription par un medecin.\n");
+
+        // DEBUG: Afficher tous les soins existants pour diagnostic
+        printf("\n=== INFORMATION DE DEBUG ===\n");
+        printf("Nombre total de soins dans le systeme: %d\n", nombreSoins);
+        for (int i = 0; i < nombreSoins; i++)
+        {
+            printf("Soin #%d: Patient=%d, Type=%s, Statut='%s', Prescrit par=%d\n",
+                   soins[i].id_soin,
+                   soins[i].id_patient,
+                   soins[i].type_soin,
+                   soins[i].statut,
+                   soins[i].id_medecin_prescripteur);
+        }
+        printf("===============================\n");
     }
     else
     {
@@ -317,14 +382,21 @@ void afficherSoinsARealiser()
 
         if (id > 0)
         {
+            // Vérifier que le soin existe et est prescrit
+            int trouve = 0;
             for (int i = 0; i < nombreSoins; i++)
             {
-                if (soins[i].id_soin == id &&
-                        (strcmp(soins[i].statut, "Prescrit") == 0 || strcmp(soins[i].statut, "Planifie") == 0))
+                if (soins[i].id_soin == id && strcmp(soins[i].statut, "Prescrit") == 0)
                 {
+                    trouve = 1;
                     realiserSoin(id);
                     break;
                 }
+            }
+            if (!trouve)
+            {
+                printf("Soin non trouve ou deja realise.\n");
+                pause();
             }
         }
     }
@@ -336,17 +408,19 @@ void realiserSoin(int id_soin)
 {
     for (int i = 0; i < nombreSoins; i++)
     {
-        if (soins[i].id_soin == id_soin)
+        if (soins[i].id_soin == id_soin && strcmp(soins[i].statut, "Prescrit") == 0)
         {
-            printf("\n=== REALISATION DU SOIN ===\n");
+            system("cls");
+            printf("\n=== REALISATION DU SOIN ===\n\n");
 
             int idx_patient = rechercherParID(soins[i].id_patient);
             printf("Patient: %s %s\n", patients[idx_patient].prenom, patients[idx_patient].nom);
             printf("Type de soin: %s\n", soins[i].type_soin);
             printf("Description: %s\n", soins[i].description);
-            printf("Posologie: %s\n", soins[i].posologie);
+            printf("Instructions: %s\n", soins[i].instructions);
+            printf("Frequence: %s\n", soins[i].frequence);
 
-            printf("\nConfirmer la realisation? (O/N): ");
+            printf("\nConfirmez-vous la realisation de ce soin? (O/N): ");
             char conf;
             scanf("%c", &conf);
             viderBuffer();
@@ -359,29 +433,112 @@ void realiserSoin(int id_soin)
                 soins[i].id_infirmier_realisateur = utilisateur_actuel ? utilisateur_actuel->id_associe : 0;
                 strcpy(soins[i].statut, "Realise");
 
-                // Mettre à jour le planning si existe
-                for (int j = 0; j < nombrePlannings; j++)
-                {
-                    if (plannings[j].id_soin == id_soin)
-                    {
-                        plannings[j].realise = 1;
-                        break;
-                    }
-                }
-
                 sauvegarderSoins();
-                sauvegarderPlannings();
 
-                printf("\nSoin realise avec succes!\n");
+                printf("\n✅ Soin realise avec succes!\n");
+                printf("Le medecin pourra consulter l'historique.\n");
             }
             else
             {
                 printf("Realisation annulee.\n");
             }
+            pause();
             return;
         }
     }
-    printf("Soin non trouve.\n");
+    printf("Soin non trouve ou deja realise.\n");
+    pause();
+}
+
+void afficherSoinsRealises()
+{
+    system("cls");
+    printf("\n=== SOINS REALISES ===\n\n");
+
+    int compteur = 0;
+    printf("ID  | Patient                 | Type                | Realise le  | Par\n");
+    printf("----|-------------------------|---------------------|-------------|-----------\n");
+
+    for (int i = 0; i < nombreSoins; i++)
+    {
+        if (strcmp(soins[i].statut, "Realise") == 0)
+        {
+            compteur++;
+            int idx_patient = rechercherParID(soins[i].id_patient);
+            char patient_nom[30] = "";
+            if (idx_patient != -1)
+                sprintf(patient_nom, "%s %s", patients[idx_patient].prenom, patients[idx_patient].nom);
+            else
+                sprintf(patient_nom, "ID %d", soins[i].id_patient);
+
+            int idx_infirmier = rechercherEmployeParID(soins[i].id_infirmier_realisateur);
+            char infirmier_nom[30] = "";
+            if (idx_infirmier != -1)
+                sprintf(infirmier_nom, "%s %s", personnel[idx_infirmier].prenom, personnel[idx_infirmier].nom);
+            else
+                sprintf(infirmier_nom, "ID %d", soins[i].id_infirmier_realisateur);
+
+            printf("%-4d| %-23s | %-19s | %-11s | %s\n",
+                   soins[i].id_soin,
+                   patient_nom,
+                   soins[i].type_soin,
+                   soins[i].date_realisation,
+                   infirmier_nom);
+        }
+    }
+
+    if (compteur == 0)
+    {
+        printf("Aucun soin realise.\n");
+    }
+
+    pause();
+}
+
+void afficherSoinsParPatient(int id_patient)
+{
+    system("cls");
+    printf("\n=== SOINS DU PATIENT ===\n\n");
+
+    int compteur = 0;
+    printf("ID  | Type                | Prescrit le | Realise le | Par\n");
+    printf("----|---------------------|-------------|------------|-----------\n");
+
+    for (int i = 0; i < nombreSoins; i++)
+    {
+        if (soins[i].id_patient == id_patient)
+        {
+            compteur++;
+            char realise_le[15] = "-";
+            if (strlen(soins[i].date_realisation) > 0)
+                strcpy(realise_le, soins[i].date_realisation);
+
+            int idx_medecin = rechercherEmployeParID(soins[i].id_medecin_prescripteur);
+            char medecin_nom[30] = "";
+            if (idx_medecin != -1)
+                sprintf(medecin_nom, "Dr %s", personnel[idx_medecin].nom);
+            else
+                sprintf(medecin_nom, "ID %d", soins[i].id_medecin_prescripteur);
+
+            printf("%-4d| %-19s | %-11s | %-10s | %s\n",
+                   soins[i].id_soin,
+                   soins[i].type_soin,
+                   soins[i].date_prescription,
+                   realise_le,
+                   medecin_nom);
+        }
+    }
+
+    if (compteur == 0)
+    {
+        printf("Aucun soin pour ce patient.\n");
+    }
+    else
+    {
+        printf("\nTotal: %d soin(s)\n", compteur);
+    }
+
+    pause();
 }
 
 void planifierSoin(int id_soin)
@@ -421,46 +578,6 @@ void planifierSoin(int id_soin)
     }
 }
 
-// ================= STATISTIQUES =================
-
-void statistiquesInfirmier()
-{
-    system("cls");
-    printf("\n=== STATISTIQUES DE L'INFIRMIER ===\n\n");
-
-    int soins_prescrits = 0, soins_realises = 0, soins_planifies = 0;
-    int soins_urgents = 0, soins_tres_urgents = 0;
-
-    for (int i = 0; i < nombreSoins; i++)
-    {
-        if (strcmp(soins[i].statut, "Prescrit") == 0) soins_prescrits++;
-        else if (strcmp(soins[i].statut, "Realise") == 0) soins_realises++;
-        else if (strcmp(soins[i].statut, "Planifie") == 0) soins_planifies++;
-
-        if (strcmp(soins[i].priorite, "Urgente") == 0) soins_urgents++;
-        else if (strcmp(soins[i].priorite, "Tres urgente") == 0) soins_tres_urgents++;
-    }
-
-    printf("=== SOINS ===\n");
-    printf("  Soins prescrits: %d\n", soins_prescrits);
-    printf("  Soins planifies: %d\n", soins_planifies);
-    printf("  Soins realises: %d\n", soins_realises);
-    printf("  Taux de realisation: %.1f%%\n",
-           soins_prescrits + soins_planifies > 0 ?
-           (float)soins_realises / (soins_prescrits + soins_planifies + soins_realises) * 100 : 0);
-
-    printf("\n=== PRIORITES ===\n");
-    printf("  Soins urgents: %d\n", soins_urgents);
-    printf("  Soins tres urgents: %d\n", soins_tres_urgents);
-
-    printf("\n=== CONSTANTES ===\n");
-    printf("  Nombre de mesures: %d\n", nombreConstantes);
-
-    pause();
-}
-
-// ================= PLANNING DES SOINS =================
-
 void afficherPlanningInfirmierJour(int id_infirmier, char *date)
 {
     system("cls");
@@ -471,12 +588,10 @@ void afficherPlanningInfirmierJour(int id_infirmier, char *date)
     printf("Heure    | Patient                 | Type de soin        | Statut\n");
     printf("---------|-------------------------|---------------------|-----------\n");
 
-    // Parcourir les plannings
     for (int i = 0; i < nombrePlannings; i++)
     {
         if (strcmp(plannings[i].date_prevue, date) == 0)
         {
-            // Trouver le soin correspondant
             for (int j = 0; j < nombreSoins; j++)
             {
                 if (soins[j].id_soin == plannings[i].id_soin)
@@ -495,11 +610,10 @@ void afficherPlanningInfirmierJour(int id_infirmier, char *date)
                     else
                         strcpy(statut, "A REALISER");
 
-                    // Couleur selon statut
                     if (plannings[i].realise)
-                        color(10, 0);  // Vert
+                        color(10, 0);
                     else
-                        color(12, 0);  // Rouge
+                        color(12, 0);
 
                     printf("%-7s | %-23s | %-19s | %s\n",
                            plannings[i].heure_prevue,
@@ -566,6 +680,40 @@ void menuPlanningInfirmier()
     while(choix != 3);
 }
 
+// ================= STATISTIQUES =================
+
+void statistiquesInfirmier()
+{
+    system("cls");
+    printf("\n=== STATISTIQUES INFIRMIER ===\n\n");
+
+    int prescrits = 0, realises = 0, planifies = 0;
+    int soins_urgents = 0, soins_tres_urgents = 0;
+
+    for (int i = 0; i < nombreSoins; i++)
+    {
+        if (strcmp(soins[i].statut, "Prescrit") == 0) prescrits++;
+        else if (strcmp(soins[i].statut, "Realise") == 0) realises++;
+        else if (strcmp(soins[i].statut, "Planifie") == 0) planifies++;
+
+        if (strcmp(soins[i].priorite, "Urgente") == 0) soins_urgents++;
+        else if (strcmp(soins[i].priorite, "Tres urgente") == 0) soins_tres_urgents++;
+    }
+
+    printf("Soins prescrits: %d\n", prescrits);
+    printf("Soins planifies: %d\n", planifies);
+    printf("Soins realises: %d\n", realises);
+    printf("Taux de realisation: %.1f%%\n",
+           (prescrits + planifies) > 0 ?
+           (float)realises / (prescrits + planifies + realises) * 100 : 0);
+
+    printf("\nSoins urgents: %d\n", soins_urgents);
+    printf("Soins tres urgents: %d\n", soins_tres_urgents);
+    printf("\nMesures de constantes: %d\n", nombreConstantes);
+
+    pause();
+}
+
 // ================= MENUS =================
 
 void menuConstantesInfirmier()
@@ -574,11 +722,11 @@ void menuConstantesInfirmier()
     do
     {
         system("cls");
-        printf("\n=== GESTION DES CONSTANTES VITALES ===\n\n");
+        printf("\n=== CONSTANTES VITALES ===\n\n");
         printf("1. Saisir constantes d'un patient\n");
-        printf("2. Historique des constantes d'un patient\n");
+        printf("2. Historique des constantes\n");
         printf("3. Retour\n");
-        printf("\nVotre choix: ");
+        printf("\nChoix: ");
 
         scanf("%d", &choix);
         viderBuffer();
@@ -589,12 +737,12 @@ void menuConstantesInfirmier()
         {
             if (nombrePatients == 0)
             {
-                printf("Aucun patient enregistre.\n");
+                printf("Aucun patient.\n");
                 pause();
                 break;
             }
             afficherListePatientsSimple();
-            printf("\nID du patient: ");
+            printf("\nID patient: ");
             int id;
             scanf("%d", &id);
             viderBuffer();
@@ -609,12 +757,12 @@ void menuConstantesInfirmier()
         {
             if (nombrePatients == 0)
             {
-                printf("Aucun patient enregistre.\n");
+                printf("Aucun patient.\n");
                 pause();
                 break;
             }
             afficherListePatientsSimple();
-            printf("\nID du patient: ");
+            printf("\nID patient: ");
             int id;
             scanf("%d", &id);
             viderBuffer();
@@ -639,10 +787,11 @@ void menuSoinsInfirmier()
         system("cls");
         printf("\n=== GESTION DES SOINS ===\n\n");
         printf("1. Soins a realiser\n");
-        printf("2. Realiser un soin\n");
-        printf("3. Historique des soins d'un patient\n");
-        printf("4. Retour\n");
-        printf("\nVotre choix: ");
+        printf("2. Soins realises\n");
+        printf("3. Soins d'un patient\n");
+        printf("4. Planning des soins\n");
+        printf("5. Retour\n");
+        printf("\nChoix: ");
 
         scanf("%d", &choix);
         viderBuffer();
@@ -653,25 +802,18 @@ void menuSoinsInfirmier()
             afficherSoinsARealiser();
             break;
         case 2:
-        {
-            afficherSoinsARealiser();
-            printf("\nID du soin a realiser: ");
-            int id;
-            scanf("%d", &id);
-            viderBuffer();
-            realiserSoin(id);
-        }
-        break;
+            afficherSoinsRealises();
+            break;
         case 3:
         {
             if (nombrePatients == 0)
             {
-                printf("Aucun patient enregistre.\n");
+                printf("Aucun patient.\n");
                 pause();
                 break;
             }
             afficherListePatientsSimple();
-            printf("\nID du patient: ");
+            printf("\nID patient: ");
             int id;
             scanf("%d", &id);
             viderBuffer();
@@ -679,80 +821,23 @@ void menuSoinsInfirmier()
         }
         break;
         case 4:
+            menuPlanningInfirmier();
+            break;
+        case 5:
             return;
         default:
             printf("Choix invalide.\n");
             pause();
         }
     }
-    while(choix != 4);
-}
-
-void afficherSoinsParPatient(int id_patient)
-{
-    system("cls");
-    printf("\n=== SOINS DU PATIENT ===\n\n");
-
-    int compteur = 0;
-    printf("ID  | Type                | Prescrit le  | Realise le  | Statut\n");
-    printf("----|---------------------|--------------|-------------|-----------\n");
-
-    for (int i = 0; i < nombreSoins; i++)
-    {
-        if (soins[i].id_patient == id_patient)
-        {
-            compteur++;
-            printf("%-4d| %-19s | %-12s | %-11s | %s\n",
-                   soins[i].id_soin,
-                   soins[i].type_soin,
-                   soins[i].date_prescription,
-                   strlen(soins[i].date_realisation) > 0 ? soins[i].date_realisation : "-",
-                   soins[i].statut);
-        }
-    }
-
-    if (compteur == 0)
-    {
-        printf("Aucun soin pour ce patient.\n");
-    }
-    else
-    {
-        printf("\nTotal: %d soin(s)\n", compteur);
-        printf("\nEntrez l'ID pour voir les details: ");
-        int id;
-        scanf("%d", &id);
-        viderBuffer();
-
-        for (int i = 0; i < nombreSoins; i++)
-        {
-            if (soins[i].id_soin == id)
-            {
-                printf("\n========================================\n");
-                printf("DETAILS SOIN #%d\n", soins[i].id_soin);
-                printf("========================================\n");
-                printf("Type: %s\n", soins[i].type_soin);
-                printf("Description: %s\n", soins[i].description);
-                printf("Posologie: %s\n", soins[i].posologie);
-                printf("Frequence: %s\n", soins[i].frequence);
-                printf("Prescrit le: %s\n", soins[i].date_prescription);
-                if (strlen(soins[i].date_realisation) > 0)
-                    printf("Realise le: %s\n", soins[i].date_realisation);
-                printf("Statut: %s\n", soins[i].statut);
-                printf("Priorite: %s\n", soins[i].priorite);
-                if (strlen(soins[i].notes) > 0)
-                    printf("Notes: %s\n", soins[i].notes);
-                printf("========================================\n");
-                break;
-            }
-        }
-    }
-
-    pause();
+    while(choix != 5);
 }
 
 void menuInfirmier()
 {
     int choix;
+
+    printf("DEBUG: INFIRMIER - nombreSoins au chargement = %d\n", nombreSoins);
 
     do
     {
@@ -861,7 +946,10 @@ void sauvegarderSoins()
 void chargerSoins()
 {
     FILE *f = fopen("soins.dat", "rb");
-    if (f == NULL) return;
+    if (f == NULL){
+       printf("DEBUG: Fichier soins.dat non trouve ou vide\n");
+       return;
+    }
 
     fread(&nombreSoins, sizeof(int), 1, f);
     fread(soins, sizeof(Soin), nombreSoins, f);
@@ -873,6 +961,7 @@ void chargerSoins()
         fread(&dernierIDSoin, sizeof(int), 1, fid);
         fclose(fid);
     }
+    printf("DEBUG: Chargement soins - nombreSoins = %d\n", nombreSoins);
 }
 
 void sauvegarderPlannings()
