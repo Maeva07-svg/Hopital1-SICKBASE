@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1777231195 source:c:\users\maeva\desktop\projet info c\sickbase\main.c
+1777752333 source:c:\users\maeva\desktop\projet info c\sickbase\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -27,6 +27,7 @@
 	"administration.h"
 	"notification.h"
 	"messagerie.h"
+	"ui.h"
 
 1771702894 source:c:\users\maeva\desktop\projet info c\sickbase\utils.c
 	<stdio.h>
@@ -364,7 +365,7 @@
 	"infirmier.h"
 	"comptes.h"
 
-1777185467 source:c:\users\maeva\desktop\projet info c\sickbase\administration.c
+1777316215 source:c:\users\maeva\desktop\projet info c\sickbase\administration.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -403,7 +404,7 @@
 	"utils.h"
 	"comptes.h"
 
-1777231277 source:c:\users\maeva\desktop\projet info c\sickbase\messagerie.c
+1777314289 source:c:\users\maeva\desktop\projet info c\sickbase\messagerie.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -412,5 +413,22 @@
 	"messagerie.h"
 	"notification.h"
 	"utils.h"
+	"comptes.h"
+
+1777490491 source:c:\users\maeva\desktop\projet info c\sickbase\sickbase_gui.c
+	<windows.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1777753755 c:\users\maeva\desktop\projet info c\sickbase\ui.h
+	"comptes.h"
+
+1777753600 source:c:\users\maeva\desktop\projet info c\sickbase\ui.c
+	<stdio.h>
+	<string.h>
+	<windows.h>
+	<time.h>
+	"ui.h"
 	"comptes.h"
 

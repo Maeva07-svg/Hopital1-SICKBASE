@@ -28,7 +28,7 @@ void statistiquesAvancees()
         color(12, 0);
         printf("\n========================================\n");
         printf("      STATISTIQUES AVANCEES            \n");
-        printf("========================================\n\n");
+        printf("========================================\n");
         color(7, 0);
 
         printf("1. Activite journaliere\n");
@@ -149,17 +149,17 @@ void statistiquesActiviteJournaliere()
         }
     }
 
-    printf("┌────────────────────────────────────────────────────┐\n");
-    printf("│                 ACTIVITE DU JOUR                   │\n");
-    printf("├────────────────────────────────────────────────────┤\n");
-    printf("│ Consultations:   %-30d │\n", consultations_jour);
-    printf("│ Rendez-vous:      %-30d │\n", rdv_jour);
-    printf("│ Interventions:    %-30d │\n", interventions_jour);
-    printf("│ Analyses labo:    %-30d │\n", analyses_jour);
-    printf("│ Soins infirmiers: %-30d │\n", soins_jour);
-    printf("├────────────────────────────────────────────────────┤\n");
-    printf("│ RECETTES:         %30.0f FCFA │\n", recettes_jour);
-    printf("└────────────────────────────────────────────────────┘\n");
+    printf("======================================================\n");
+    printf("                  ACTIVITE DU JOUR                    \n");
+    printf("======================================================\n");
+    printf(" Consultations:   %-30d  \n", consultations_jour);
+    printf(" Rendez-vous:      %-30d \n", rdv_jour);
+    printf(" Interventions:    %-30d \n", interventions_jour);
+    printf(" Analyses labo:    %-30d \n", analyses_jour);
+    printf(" Soins infirmiers: %-30d \n", soins_jour);
+    printf("======================================================\n");
+    printf(" RECETTES:         %30.0f FCFA \n", recettes_jour);
+    printf("======================================================\n");
 
     pause();
 }
@@ -206,15 +206,15 @@ void statistiquesParPeriode(char *date_debut, char *date_fin)
         }
     }
 
-    printf("┌────────────────────────────────────────────────────┐\n");
-    printf("│              STATISTIQUES PERIODE                  │\n");
-    printf("├────────────────────────────────────────────────────┤\n");
-    printf("│ Consultations:   %-30d │\n", consultations_periode);
-    printf("│ Interventions:    %-30d │\n", interventions_periode);
-    printf("│ Hospitalisations: %-30d │\n", hospitalisations_periode);
-    printf("├────────────────────────────────────────────────────┤\n");
-    printf("│ RECETTES:         %30.0f FCFA │\n", recettes_periode);
-    printf("└────────────────────────────────────────────────────┘\n");
+    printf("======================================================\n");
+    printf("               STATISTIQUES PERIODE                   \n");
+    printf("======================================================\n");
+    printf(" Consultations:   %-30d  \n", consultations_periode);
+    printf(" Interventions:    %-30d \n", interventions_periode);
+    printf(" Hospitalisations: %-30d \n", hospitalisations_periode);
+    printf("======================================================\n");
+    printf(" RECETTES:         %30.0f FCFA \n", recettes_periode);
+    printf("======================================================\n");
 
     pause();
 }
@@ -265,20 +265,20 @@ void statistiquesFinancieres()
         ca_pharmacie += ventes[i].prix_total;
     }
 
-    printf("┌──────────────────────────────────────────────────────┐\n");
-    printf("│              ETAT FINANCIER GLOBAL                   │\n");
-    printf("├──────────────────────────────────────────────────────┤\n");
-    printf("│ Consultations:                %20.0f FCFA │\n", total_consultations);
-    printf("│ Laboratoire:                  %20.0f FCFA │\n", ca_laboratoire);
-    printf("│ Pharmacie:                    %20.0f FCFA │\n", ca_pharmacie);
-    printf("├──────────────────────────────────────────────────────┤\n");
-    printf("│ TOTAL FACTURES:               %20.0f FCFA │\n", total_factures);
-    printf("│ TOTAL PERCU:                  %20.0f FCFA │\n", total_percu);
-    printf("│ TOTAL IMPAYE:                 %20.0f FCFA │\n", total_impaye);
-    printf("├──────────────────────────────────────────────────────┤\n");
-    printf("│ TAUX DE RECOUVREMENT:         %19.1f %% │\n",
+    printf("========================================================\n");
+    printf("              ETAT FINANCIER GLOBAL                   \n");
+    printf("========================================================\n");
+    printf(" Consultations:                %20.0f FCFA \n", total_consultations);
+    printf(" Laboratoire:                  %20.0f FCFA \n", ca_laboratoire);
+    printf(" Pharmacie:                    %20.0f FCFA \n", ca_pharmacie);
+    printf("========================================================\n");
+    printf(" TOTAL FACTURES:               %20.0f FCFA \n", total_factures);
+    printf(" TOTAL PERCU:                  %20.0f FCFA \n", total_percu);
+    printf(" TOTAL IMPAYE:                 %20.0f FCFA \n", total_impaye);
+    printf("========================================================\n");
+    printf(" TAUX DE RECOUVREMENT:         %19.1f %% \n",
            total_factures > 0 ? total_percu / total_factures * 100 : 0);
-    printf("└──────────────────────────────────────────────────────┘\n");
+    printf("========================================================\n");
 
     pause();
 }
@@ -302,9 +302,9 @@ void statistiquesMedicales()
         }
     }
 
-    printf("┌────────────────────────────────────────────────────┐\n");
-    printf("│           MALADIES LES PLUS FREQUENTES             │\n");
-    printf("├────────────────────────────────────────────────────┤\n");
+    printf("========================================================\n");
+    printf("            MALADIES LES PLUS FREQUENTES                \n");
+    printf("========================================================\n");
     for (int m = 0; m < nombreMaladies; m++)
     {
         if (maladies_count[m] > 0)
@@ -312,12 +312,12 @@ void statistiquesMedicales()
             printf("│ %-20s : %-30d │\n", maladies[m].nom, maladies_count[m]);
         }
     }
-    printf("└────────────────────────────────────────────────────┘\n");
+    printf("========================================================\n");
 
     // Interventions les plus frequentes
-    printf("\n┌────────────────────────────────────────────────────┐\n");
-    printf("│           INTERVENTIONS LES PLUS FREQUENTES        │\n");
-    printf("├────────────────────────────────────────────────────┤\n");
+    printf("\n========================================================\n");
+    printf("           INTERVENTIONS LES PLUS FREQUENTES              \n");
+    printf("==========================================================\n");
 
     // Compter les types d'interventions
     int interventions_count[MAX_INTERVENTIONS] = {0};
@@ -346,9 +346,9 @@ void statistiquesMedicales()
 
     for (int i = 0; i < nb_types_interventions && i < 5; i++)
     {
-        printf("│ %-20s : %-30d │\n", interventions_types[i], interventions_count[i]);
+        printf(" %-20s : %-30d \n", interventions_types[i], interventions_count[i]);
     }
-    printf("└────────────────────────────────────────────────────┘\n");
+    printf("========================================================n");
 
     pause();
 }
@@ -359,9 +359,9 @@ void statistiquesPersonnelAvance()
     printf("\n=== STATISTIQUES PERSONNEL AVANCEES ===\n\n");
 
     // Personnel par service
-    printf("┌────────────────────────────────────────────────────┐\n");
-    printf("│              REPARTITION PAR SERVICE               │\n");
-    printf("├────────────────────────────────────────────────────┤\n");
+    printf("========================================================\n");
+    printf("              REPARTITION PAR SERVICE                  \n");
+    printf("========================================================\n");
 
     char services[MAX_PERSONNEL][MAX_SERVICE];
     int services_count[MAX_PERSONNEL] = {0};
@@ -394,12 +394,12 @@ void statistiquesPersonnelAvance()
     {
         printf("│ %-20s : %-30d │\n", services[i], services_count[i]);
     }
-    printf("└────────────────────────────────────────────────────┘\n");
+    printf("========================================================\n");
 
     // Conges
-    printf("\n┌────────────────────────────────────────────────────┐\n");
-    printf("│                 STATUT DES CONGES                  │\n");
-    printf("├────────────────────────────────────────────────────┤\n");
+    printf("\n========================================================\n");
+    printf("                  STATUT DES CONGES                       \n");
+    printf("========================================================  \n");
 
     int total_conges_annuels = 0;
     int total_conges_restants = 0;
@@ -412,12 +412,12 @@ void statistiquesPersonnelAvance()
         }
     }
 
-    printf("│ Total conges annuels:    %20d jours │\n", total_conges_annuels);
-    printf("│ Total conges restants:   %20d jours │\n", total_conges_restants);
-    printf("│ Taux utilisation:        %19.1f %% │\n",
+    printf(" Total conges annuels:    %20d jours \n", total_conges_annuels);
+    printf(" Total conges restants:   %20d jours \n", total_conges_restants);
+    printf(" Taux utilisation:        %19.1f %% \n",
            total_conges_annuels > 0 ?
            (float)(total_conges_annuels - total_conges_restants) / total_conges_annuels * 100 : 0);
-    printf("└────────────────────────────────────────────────────┘\n");
+    printf("========================================================\n");
 
     // Masse salariale
     float total_salaires = 0;
@@ -431,13 +431,13 @@ void statistiquesPersonnelAvance()
     }
     salaire_moyen = nombreEmployes > 0 ? total_salaires / nombreEmployes : 0;
 
-    printf("\n┌────────────────────────────────────────────────────┐\n");
-    printf("│                   MASSE SALARIALE                  │\n");
-    printf("├────────────────────────────────────────────────────┤\n");
-    printf("│ Total mensuel:            %20.0f FCFA │\n", total_salaires);
-    printf("│ Salaire moyen:            %20.0f FCFA │\n", salaire_moyen);
-    printf("│ Total annuel:             %20.0f FCFA │\n", total_salaires * 12);
-    printf("└────────────────────────────────────────────────────┘\n");
+    printf("\n========================================================\n");
+    printf("                   MASSE SALARIALE                  \n");
+    printf("========================================================\n");
+    printf(" Total mensuel:            %20.0f FCFA \n", total_salaires);
+    printf(" Salaire moyen:            %20.0f FCFA \n", salaire_moyen);
+    printf(" Total annuel:             %20.0f FCFA \n", total_salaires * 12);
+    printf("========================================================\n");
 
     pause();
 }
@@ -464,21 +464,21 @@ void statistiquesPatientParAge()
             seniors++;
     }
 
-    printf("┌────────────────────────────────────────────────────┐\n");
-    printf("│              REPARTITION PAR TRANCHE D'AGE         │\n");
-    printf("├────────────────────────────────────────────────────┤\n");
-    printf("│ Enfants (0-12 ans):       %20d patients │\n", enfants);
-    printf("│ Adolescents (13-18 ans):  %20d patients │\n", adolescents);
-    printf("│ Adultes (19-59 ans):      %20d patients │\n", adultes);
-    printf("│ Seniors (60+ ans):        %20d patients │\n", seniors);
-    printf("├────────────────────────────────────────────────────┤\n");
-    printf("│ TOTAL:                    %20d patients │\n", nombrePatients);
-    printf("└────────────────────────────────────────────────────┘\n");
+    printf("========================================================n");
+    printf("              REPARTITION PAR TRANCHE D'AGE         \n");
+    printf("========================================================\n");
+    printf(" Enfants (0-12 ans):       %20d patients \n", enfants);
+    printf(" Adolescents (13-18 ans):  %20d patients \n", adolescents);
+    printf(" Adultes (19-59 ans):      %20d patients \n", adultes);
+    printf(" Seniors (60+ ans):        %20d patients \n", seniors);
+    printf("========================================================\n");
+    printf(" TOTAL:                    %20d patients \n", nombrePatients);
+    printf("========================================================\n");
 
     // Diagramme en barres ASCII
-    printf("\n┌────────────────────────────────────────────────────┐\n");
-    printf("│                 DIAGRAMME D'AGE                     │\n");
-    printf("├────────────────────────────────────────────────────┤\n");
+    printf("\n========================================================\n");
+    printf("                 DIAGRAMME D'AGE                       \n");
+    printf("========================================================\n");
 
     int max_val = enfants;
     if (adolescents > max_val) max_val = adolescents;
@@ -487,19 +487,19 @@ void statistiquesPatientParAge()
 
     int echelle = max_val > 0 ? 40 / max_val : 1;
 
-    printf("│ Enfants     : ");
-    for (int i = 0; i < enfants * echelle; i++) printf("│");
+    printf(" Enfants     : ");
+    for (int i = 0; i < enfants * echelle; i++) printf(" ");
     printf("\n");
-    printf("│ Adolescents : ");
-    for (int i = 0; i < adolescents * echelle; i++) printf("│");
+    printf(" Adolescents : ");
+    for (int i = 0; i < adolescents * echelle; i++) printf(" ");
     printf("\n");
-    printf("│ Adultes     : ");
-    for (int i = 0; i < adultes * echelle; i++) printf("│");
+    printf(" Adultes     : ");
+    for (int i = 0; i < adultes * echelle; i++) printf(" ");
     printf("\n");
-    printf("│ Seniors     : ");
-    for (int i = 0; i < seniors * echelle; i++) printf("│");
+    printf(" Seniors     : ");
+    for (int i = 0; i < seniors * echelle; i++) printf(" ");
     printf("\n");
-    printf("└────────────────────────────────────────────────────┘\n");
+    printf("========================================================\n");
 
     pause();
 }
@@ -907,21 +907,21 @@ void afficherLogsSysteme()
     printf("\n=== LOGS SYSTEME ===\n\n");
 
     printf("Dernieres activites:\n");
-    printf("┌────────────────────────────────────────────────────────────┐\n");
+    printf("========================================================\n");
 
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
 
-    printf("│ %02d/%02d/%04d %02d:%02d - Connexion administrateur        │\n",
+    printf("  %02d/%02d/%04d %02d:%02d - Connexion administrateur         \n",
            tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900, tm.tm_hour, tm.tm_min);
-    printf("│ %02d/%02d/%04d %02d:%02d - Consultation des statistiques   │\n",
+    printf("  %02d/%02d/%04d %02d:%02d - Consultation des statistiques    \n",
            tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900, tm.tm_hour, tm.tm_min);
-    printf("│ %02d/%02d/%04d %02d:%02d - Sauvegarde des donnees          │\n",
+    printf("  %02d/%02d/%04d %02d:%02d - Sauvegarde des donnees           \n",
            tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900, tm.tm_hour-1, tm.tm_min);
-    printf("│ %02d/%02d/%04d %02d:%02d - Ajout nouveau patient           │\n",
+    printf("  %02d/%02d/%04d %02d:%02d - Ajout nouveau patient            \n",
            tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900, tm.tm_hour-2, tm.tm_min);
 
-    printf("└────────────────────────────────────────────────────────────┘\n");
+    printf("========================================================\n");
 
     printf("\n1. Nettoyer les logs\n");
     printf("2. Retour\n");

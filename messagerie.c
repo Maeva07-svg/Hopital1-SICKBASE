@@ -389,8 +389,8 @@ void afficherConversation(int id_utilisateur, int id_contact)
         sprintf(contact_nom, "Utilisateur %d", id_contact);
 
     printf("\n==========================================================\n");
-    printf("||                     Conversation avec %-30s ||\n", contact_nom);
-    printf("==========================================================\\n");
+    printf("       Conversation avec %-30s \n", contact_nom);
+    printf("==========================================================\n");
 
     // Afficher tous les messages de la conversation
     int messages_affiches = 0;
