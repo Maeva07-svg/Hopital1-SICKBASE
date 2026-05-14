@@ -665,38 +665,85 @@ void afficherStatistiquesPersonnel()
     int hommes = 0, femmes = 0;
     float totalSalaire = 0;
 
-    // Compteurs par fonction
+    // Tableaux pour compter par fonction
     int medecins = 0, infirmiers = 0, administratifs = 0;
     int techniciens = 0, chirurgiens = 0, radiologues = 0, pharmaciens = 0;
+    int autres = 0;
+
+    // Tableau pour compter par service
+    char services[MAX_PERSONNEL][MAX_SERVICE];
+    int nb_services = 0;
+    int comptes_services[MAX_PERSONNEL] = {0};
 
     for (int i = 0; i < nombreEmployes; i++)
     {
+        // Compter actifs/inactifs
         if (personnel[i].actif) actifs++;
         else inactifs++;
 
+        // Compter par genre
         if (personnel[i].genre == 'M') hommes++;
-        else femmes++;
+        else if (personnel[i].genre == 'F') femmes++;
 
+        // Compter salaire total
         totalSalaire += personnel[i].salaire;
 
-        if (strcmp(personnel[i].fonction, "Medecin") == 0) medecins++;
-        else if (strcmp(personnel[i].fonction, "Infirmier") == 0) infirmiers++;
-        else if (strcmp(personnel[i].fonction, "Administratif") == 0) administratifs++;
-        else if (strcmp(personnel[i].fonction, "Technicien") == 0) techniciens++;
-        else if (strcmp(personnel[i].fonction, "Chirurgien") == 0) chirurgiens++;
-        else if (strcmp(personnel[i].fonction, "Radiologue") == 0) radiologues++;
-        else if (strcmp(personnel[i].fonction, "Pharmacien") == 0) pharmaciens++;
+        // Compter par fonction (en ignorant la casse)
+        char fonction_temp[MAX_NAME];
+        strcpy(fonction_temp, personnel[i].fonction);
+
+        // Convertir en minuscules pour comparaison
+        for (int j = 0; fonction_temp[j]; j++)
+            fonction_temp[j] = tolower(fonction_temp[j]);
+
+        if (strstr(fonction_temp, "medecin") != NULL || strstr(fonction_temp, "médecin") != NULL)
+            medecins++;
+        else if (strstr(fonction_temp, "infirmier") != NULL || strstr(fonction_temp, "infirmière") != NULL)
+            infirmiers++;
+        else if (strstr(fonction_temp, "administratif") != NULL || strstr(fonction_temp, "admin") != NULL)
+            administratifs++;
+        else if (strstr(fonction_temp, "technicien") != NULL || strstr(fonction_temp, "technicienne") != NULL)
+            techniciens++;
+        else if (strstr(fonction_temp, "chirurgien") != NULL)
+            chirurgiens++;
+        else if (strstr(fonction_temp, "radiologue") != NULL)
+            radiologues++;
+        else if (strstr(fonction_temp, "pharmacien") != NULL || strstr(fonction_temp, "pharmacienne") != NULL)
+            pharmaciens++;
+        else
+            autres++;
+
+        // Compter par service
+        if (strlen(personnel[i].service) > 0)
+        {
+            int trouve = 0;
+            for (int s = 0; s < nb_services; s++)
+            {
+                if (strcmp(services[s], personnel[i].service) == 0)
+                {
+                    comptes_services[s]++;
+                    trouve = 1;
+                    break;
+                }
+            }
+            if (!trouve && nb_services < MAX_PERSONNEL)
+            {
+                strcpy(services[nb_services], personnel[i].service);
+                comptes_services[nb_services] = 1;
+                nb_services++;
+            }
+        }
     }
 
-    printf("\nSTATUT:\n");
+    printf("\n=== STATUT ===\n");
     printf("  Actifs: %d (%.1f%%)\n", actifs, (float)actifs/nombreEmployes*100);
     printf("  Inactifs: %d (%.1f%%)\n", inactifs, (float)inactifs/nombreEmployes*100);
 
-    printf("\nREPARTITION PAR GENRE:\n");
+    printf("\n=== REPARTITION PAR GENRE ===\n");
     printf("  Hommes: %d (%.1f%%)\n", hommes, (float)hommes/nombreEmployes*100);
     printf("  Femmes: %d (%.1f%%)\n", femmes, (float)femmes/nombreEmployes*100);
 
-    printf("\nREPARTITION PAR FONCTION:\n");
+    printf("\n=== REPARTITION PAR FONCTION ===\n");
     printf("  Medecins: %d\n", medecins);
     printf("  Infirmiers: %d\n", infirmiers);
     printf("  Administratifs: %d\n", administratifs);
@@ -704,10 +751,40 @@ void afficherStatistiquesPersonnel()
     printf("  Chirurgiens: %d\n", chirurgiens);
     printf("  Radiologues: %d\n", radiologues);
     printf("  Pharmaciens: %d\n", pharmaciens);
+    if (autres > 0)
+        printf("  Autres: %d\n", autres);
 
-    printf("\nSALAIRE:\n");
+    printf("\n=== REPARTITION PAR SERVICE ===\n");
+    if (nb_services > 0)
+    {
+        for (int s = 0; s < nb_services; s++)
+        {
+            printf("  %s: %d employe(s)\n", services[s], comptes_services[s]);
+        }
+    }
+    else
+    {
+        printf("  Aucun service enregistre.\n");
+    }
+
+    printf("\n=== SALAIRES ===\n");
     printf("  Masse salariale mensuelle: %.2f €\n", totalSalaire);
     printf("  Salaire moyen: %.2f €\n", totalSalaire / nombreEmployes);
+
+    // Ajouter les statistiques des congés
+    int total_conges_annuels = 0;
+    int total_conges_restants = 0;
+    for (int i = 0; i < nombreEmployes; i++)
+    {
+        total_conges_annuels += personnel[i].jours_conges_annuels;
+        total_conges_restants += personnel[i].jours_conges_restants;
+    }
+
+    printf("\n=== CONGES ===\n");
+    printf("  Total conges annuels: %d jours\n", total_conges_annuels);
+    printf("  Total conges restants: %d jours\n", total_conges_restants);
+    printf("  Taux d'utilisation: %.1f%%\n",
+           total_conges_annuels > 0 ? (float)(total_conges_annuels - total_conges_restants) / total_conges_annuels * 100 : 0);
 
     pause();
 }

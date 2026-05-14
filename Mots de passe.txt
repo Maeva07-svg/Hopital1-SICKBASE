@@ -1,0 +1,34 @@
+Mots de passe
+Administrateur
+Login: admin
+Mot de passe: admin123
+
+
+Patient
+Login: patient_1_Marie
+Mot de passe: patient123
+
+Login: patient_2_Haris
+Mot de passe: patient123
+
+Login: patient_maeva
+Mot de passe: patient123
+
+Medecin
+Login: medecin_1_Diallo
+Mot de Passe: change_me
+
+Login: medecin_8_Albert
+Mot de Passe: change_me
+
+Infirmier 
+Login: infirmier_2_Kara
+Mot de passe: change_me
+
+Technicien de laboratoire
+Login: technicien_6_Martin
+Mots de passe: change_me
+
+Pharmacien
+Login: pharmacien_7_Fabien
+Mot de passe: change_me

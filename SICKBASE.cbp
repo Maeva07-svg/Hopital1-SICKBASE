@@ -31,11 +31,22 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Linker>
+			<Add library="gdi32" />
+		</Linker>
 		<Unit filename="Makefile.mak" />
+		<Unit filename="administration.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="administration.h" />
 		<Unit filename="archives.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="archives.h" />
+		<Unit filename="comptes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="comptes.h" />
 		<Unit filename="consultations.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -44,25 +55,53 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="diagnostic.h" />
+		<Unit filename="facturation.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="facturation.h" />
 		<Unit filename="fichiers.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="fichiers.h" />
+		<Unit filename="fichiers_comptes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="fichiers_diagnostic.h" />
 		<Unit filename="fichiers_personnel.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="fichiers_personnel.h" />
+		<Unit filename="fichiers_rdv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="fichiers_rdv.h" />
 		<Unit filename="fichiers_relations.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="fichiers_relations.h" />
+		<Unit filename="infirmier.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="infirmier.h" />
 		<Unit filename="interventions.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="interventions.h" />
+		<Unit filename="laboratoire.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="laboratoire.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="messagerie.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="messagerie.h" />
+		<Unit filename="notification.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="notification.h" />
 		<Unit filename="ordonnances.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -75,6 +114,22 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="personnel.h" />
+		<Unit filename="pharmacie.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pharmacie.h" />
+		<Unit filename="rdv_avance.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="rdv_avance.h" />
+		<Unit filename="recuperation.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="recuperation.h" />
+		<Unit filename="ui.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ui.h" />
 		<Unit filename="utils.c">
 			<Option compilerVar="CC" />
 		</Unit>

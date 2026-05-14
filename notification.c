@@ -15,7 +15,7 @@ void envoyer_notification(int patient_id, const char* type, const char* message)
         notifications[compteur].lu = 0;
 
         compteur++;
-        printf("Notification envoyée au patient %d\n", patient_id);
+        printf("Notification envoyÃ©e au patient %d\n", patient_id);
     }
 }
 

@@ -10,6 +10,7 @@
 #include "utils.h"
 #include "patient.h"
 #include "personnel.h"
+#include "fichiers.h"
 
 // Définition des variables globales
 Consultation consultations[MAX_CONSULTATIONS];
@@ -43,7 +44,6 @@ void planifierConsultation()
         return;
     }
 
-    // Afficher la liste des patients
     afficherListePatientsSimple();
 
     int id_patient;
@@ -59,20 +59,19 @@ void planifierConsultation()
         return;
     }
 
-    // Afficher la liste des médecins
     printf("\nMEDECINS DISPONIBLES:\n");
     printf("ID   | Nom & Prenom           | Specialite\n");
     printf("-----|------------------------|----------------\n");
 
-    for (int i = 0; i < nombreEmployes; i++)
+    for (int j = 0; j < nombreEmployes; j++)
     {
-        if (personnel[i].actif && strcmp(personnel[i].fonction, "Medecin") == 0)
+        if (personnel[j].actif && strcmp(personnel[j].fonction, "Medecin") == 0)
         {
             printf("%-4d | %-10s %-10s | %s\n",
-                   personnel[i].id,
-                   personnel[i].prenom,
-                   personnel[i].nom,
-                   personnel[i].specialite);
+                   personnel[j].id,
+                   personnel[j].prenom,
+                   personnel[j].nom,
+                   personnel[j].specialite);
         }
     }
 
@@ -89,7 +88,6 @@ void planifierConsultation()
         return;
     }
 
-    // Créer la consultation
     Consultation c;
     memset(&c, 0, sizeof(Consultation));
 
@@ -122,7 +120,6 @@ void planifierConsultation()
     consultations[nombreConsultations] = c;
     nombreConsultations++;
 
-    // Créer aussi un rendez-vous
     RendezVous r;
     memset(&r, 0, sizeof(RendezVous));
 
@@ -205,7 +202,6 @@ void ajouterConsultation(int id_patient, int id_medecin)
     consultations[nombreConsultations] = c;
     nombreConsultations++;
 
-    // Mettre à jour le diagnostic du patient si nécessaire
     int index_patient = rechercherParID(id_patient);
     if (index_patient != -1 && strlen(c.diagnostic) > 0)
     {
@@ -310,7 +306,7 @@ void modifierConsultation(int index)
                 viderBuffer();
                 break;
             case 11:
-                printf("Nouveau statut (Planifié/Effectué/Annulé/Reporté): ");
+                printf("Nouveau statut (Planifie/Effectue/Annule/Reporte): ");
                 fgets(c->statut, 20, stdin);
                 c->statut[strcspn(c->statut, "\n")] = '\0';
                 break;
@@ -604,35 +600,6 @@ void listerRendezVousJour(char *date)
     pause();
 }
 
-void listerRendezVousMedecin(int id_medecin)
-{
-    system("cls");
-    printf("\n=== RENDEZ-VOUS DU MEDECIN %d ===\n\n", id_medecin);
-
-    int compteur = 0;
-    for (int i = 0; i < nombreRendezVous; i++)
-    {
-        if (rendezVous[i].id_medecin == id_medecin &&
-            strcmp(rendezVous[i].statut, "Confirmé") == 0)
-        {
-            compteur++;
-            printf("[%d] %s a %s - Patient %d - %s\n",
-                   compteur,
-                   rendezVous[i].date,
-                   rendezVous[i].heure,
-                   rendezVous[i].id_patient,
-                   rendezVous[i].motif);
-        }
-    }
-
-    if (compteur == 0)
-    {
-        printf("Aucun rendez-vous pour ce medecin.\n");
-    }
-
-    pause();
-}
-
 void menuConsultations()
 {
     int choix;
@@ -640,7 +607,7 @@ void menuConsultations()
     do
     {
         system("cls");
-        color(13, 0); // Magenta
+        color(13, 0);
         printf("\n=== GESTION DES CONSULTATIONS ===\n\n");
         color(7, 0);
 
@@ -816,10 +783,9 @@ void menuRendezVous()
 
         printf("1. Planifier un rendez-vous\n");
         printf("2. Lister rendez-vous du jour\n");
-        printf("3. Lister rendez-vous d'un medecin\n");
-        printf("4. Confirmer un rendez-vous\n");
-        printf("5. Annuler un rendez-vous\n");
-        printf("6. Retour\n");
+        printf("3. Confirmer un rendez-vous\n");
+        printf("4. Annuler un rendez-vous\n");
+        printf("5. Retour\n");
         printf("\nVotre choix: ");
 
         scanf("%d", &choix);
@@ -855,15 +821,6 @@ void menuRendezVous()
             case 3:
             {
                 int id;
-                printf("ID Medecin: ");
-                scanf("%d", &id);
-                viderBuffer();
-                listerRendezVousMedecin(id);
-                break;
-            }
-            case 4:
-            {
-                int id;
                 printf("ID Rendez-vous: ");
                 scanf("%d", &id);
                 viderBuffer();
@@ -889,7 +846,7 @@ void menuRendezVous()
                 }
                 break;
             }
-            case 5:
+            case 4:
             {
                 int id;
                 printf("ID Rendez-vous: ");
@@ -917,11 +874,11 @@ void menuRendezVous()
                 }
                 break;
             }
-            case 6:
+            case 5:
                 return;
             default:
                 printf("Choix invalide.\n");
                 pause();
         }
-    } while(choix != 6);
+    } while(choix != 5);
 }

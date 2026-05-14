@@ -18,9 +18,9 @@ void envoyer_message(int expediteur_id, int recepteur_id, const char* contenu) {
         compteur_msg++;
 
         // Notifier le recepteur
-        envoyer_notification(recepteur_id, "message", "Nouveau message reçu");
+        envoyer_notification(recepteur_id, "message", "Nouveau message reÃ§u");
 
-        printf("Message envoyé de %d à %d\n", expediteur_id, recepteur_id);
+        printf("Message envoyÃ© de %d Ã  %d\n", expediteur_id, recepteur_id);
     }
 }
 

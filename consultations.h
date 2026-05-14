@@ -8,6 +8,8 @@
 #define MAX_CONSULTATIONS 5000
 #define MAX_MOTIF 200
 #define MAX_OBSERVATIONS 500
+#define MAX_RDV_PAR_JOUR 30
+#define MAX_JOURS 365
 
 // Structure pour une consultation
 typedef struct
