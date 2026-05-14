@@ -25,7 +25,7 @@ typedef struct
 {
     int id_notification;
     int id_destinataire;      // ID du compte destinataire
-    int id_expediteur;        // ID du compte expéditeur (0 pour système)
+    int id_expediteur;        // ID du compte expÃ©diteur (0 pour systÃ¨me)
     char type[30];
     char message[MAX_MESSAGE];
     char date_envoi[20];

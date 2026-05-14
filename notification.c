@@ -7,7 +7,7 @@
 #include "utils.h"
 #include "comptes.h"
 
-// Définition des variables globales
+// DÃ©finition des variables globales
 Notification notifications[MAX_NOTIFICATIONS];
 int nombreNotifications = 0;
 int dernierIDNotification = 0;
@@ -45,7 +45,7 @@ void envoyerNotification(int id_destinataire, int id_expediteur, const char* typ
 
     sauvegarderNotifications();
 
-    // Afficher immédiatement la notification si le destinataire est l'utilisateur actuel
+    // Afficher immÃ©diatement la notification si le destinataire est l'utilisateur actuel
     if (utilisateur_actuel != NULL && utilisateur_actuel->id_compte == id_destinataire)
     {
         color(11, 0);
@@ -82,9 +82,9 @@ void afficherNotifications(int id_destinataire)
         {
             compteur++;
 
-            // Couleur selon priorité
+            // Couleur selon prioritÃ©
             if (notifications[i].priorite == 1)
-                color(12, 0);  // Rouge pour haute priorité
+                color(12, 0);  // Rouge pour haute prioritÃ©
             else if (!notifications[i].lu)
                 color(14, 0);  // Jaune pour non lu
             else
@@ -244,7 +244,7 @@ void notifierRdvConfirme(int id_patient, int id_medecin, char *date, char *heure
     sprintf(message, "Votre rendez-vous avec le medecin ID %d est confirme pour le %s a %s.", id_medecin, date, heure);
     envoyerNotification(id_patient, id_medecin, "RDV Confirme", message, 0);
 
-    // Notification pour le médecin
+    // Notification pour le mÃ©decin
     sprintf(message, "Le patient ID %d a confirme son rendez-vous pour le %s a %s.", id_patient, date, heure);
     envoyerNotification(id_medecin, id_patient, "RDV Confirme", message, 0);
 }
@@ -287,7 +287,7 @@ void notifierSoinPrescrit(int id_patient, int id_medecin, char *type_soin)
     envoyerNotification(id_patient, id_medecin, "Soin Prescrit", message, 0);
 
     // Notification pour l'infirmier
-    // Rechercher un infirmier disponible (simplifié)
+    // Rechercher un infirmier disponible (simplifiÃ©)
     for (int i = 0; i < nombreEmployes; i++)
     {
         if (personnel[i].actif && strcmp(personnel[i].fonction, "Infirmier") == 0)

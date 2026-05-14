@@ -8,7 +8,7 @@
 #include "utils.h"
 #include "comptes.h"
 
-// Définition des variables globales
+// DÃ©finition des variables globales
 Message messages[MAX_MESSAGES];
 int nombreMessages = 0;
 int dernierIDMessage = 0;
@@ -151,7 +151,7 @@ void afficherConversations(int id_utilisateur)
     printf("\n==========================================================\n");
     printf("|                     MESSAGERIE (SICKBASE)                  |\n");
 
-    // Créer une liste unique de contacts
+    // CrÃ©er une liste unique de contacts
     int contacts[MAX_CONTACTS];
     char contacts_nom[MAX_CONTACTS][100];
     char dernier_msg[MAX_CONTACTS][MAX_MSG_CONTENU];
@@ -182,7 +182,7 @@ void afficherConversations(int id_utilisateur)
                 if (messages[i].id_destinataire == id_utilisateur && messages[i].lu == 0)
                     nb_non_lus[j]++;
 
-                // Mettre à jour le dernier message si plus récent
+                // Mettre Ã  jour le dernier message si plus rÃ©cent
                 if (messages[i].id_message > id_dernier_msg[j])
                 {
                     id_dernier_msg[j] = messages[i].id_message;
@@ -235,14 +235,14 @@ void afficherConversations(int id_utilisateur)
         return;
     }
 
-    // Trier les conversations par date (plus récente en premier)
+    // Trier les conversations par date (plus rÃ©cente en premier)
     for (int i = 0; i < nb_contacts - 1; i++)
     {
         for (int j = i + 1; j < nb_contacts; j++)
         {
             if (id_dernier_msg[i] < id_dernier_msg[j])
             {
-                // Échanger
+                // Ã‰changer
                 int temp_id = contacts[i];
                 contacts[i] = contacts[j];
                 contacts[j] = temp_id;
@@ -511,7 +511,7 @@ void envoyerMessageRapide(int id_expediteur)
     scanf("%d", &id_dest);
     viderBuffer();
 
-    // Vérifier si le destinataire existe
+    // VÃ©rifier si le destinataire existe
     int existe = 0;
     for (int i = 0; i < nombreComptes; i++)
     {

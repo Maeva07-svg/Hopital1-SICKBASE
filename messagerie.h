@@ -21,7 +21,7 @@ typedef struct
     int lu;                     // 0 = non lu, 1 = lu
     int supprime_expediteur;
     int supprime_destinataire;
-    int modifie;                // 1 = message modifié
+    int modifie;                // 1 = message modifiÃ©
     char date_modification[20];
     char heure_modification[10];
 } Message;
