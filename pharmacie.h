@@ -54,7 +54,7 @@ extern int dernierIDVente;
 
 // Prototypes - Gestion des médicaments
 void initialiserPharmacie();
-void ajouterMedicament();
+void ajouterMedicament(int index_ordonnance);
 void modifierMedicament(int id);
 void supprimerMedicament(int id);
 void afficherStock();

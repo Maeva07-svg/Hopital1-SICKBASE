@@ -31,6 +31,7 @@ extern int nombreReponsesSecurite;
 // Prototypes
 void initialiserRecuperation();
 void initialiserQuestionsSecurite();
+void chargerReponsesSecurite();
 void definirQuestionsSecurite(int id_compte);
 int verifierReponsesSecurite(int id_compte);
 void reinitialiserMotDePasse(int id_compte);

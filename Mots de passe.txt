@@ -3,7 +3,6 @@ Administrateur
 Login: admin
 Mot de passe: admin123
 
-
 Patient
 Login: patient_1_Marie
 Mot de passe: patient123

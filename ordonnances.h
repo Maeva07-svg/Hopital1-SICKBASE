@@ -48,7 +48,7 @@ extern int dernierIDOrdonnance;
 // Prototypes
 void initialiserOrdonnances();
 void creerOrdonnance(int id_patient, int id_medecin, int id_consultation);
-void ajouterMedicament();
+void ajouterMedicament(int index_ordonnance);
 void modifierOrdonnance(int index);
 void afficherOrdonnance(int index);
 void afficherOrdonnancesPatient(int id_patient);

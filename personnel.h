@@ -59,7 +59,7 @@ extern Employe personnel[MAX_PERSONNEL];
 extern int nombreEmployes;
 extern int dernierIDEmploye;
 
-// Prototypes des fonctions personnel
+// ==================== FONCTIONS EXISTANTES ====================
 void initialiserFonctionsPersonnel();
 void ajouterEmploye();
 void afficherListeEmployesSimple();
@@ -75,5 +75,13 @@ void menuAffichagePersonnel();
 void gererConges(int index);
 void afficherEmployesParService(char *service);
 void afficherEmployesParFonction(char *fonction);
+
+// ==================== FONCTIONS UI POUR PERSONNEL ====================
+void ui_afficherEcranPersonnel();           // Affiche le menu de gestion du personnel
+void ui_afficherListePersonnel();           // Affiche la liste complète du personnel
+void ui_afficherEcranAjouterEmploye();      // Affiche le formulaire d'ajout
+void ui_afficherEcranModifierEmploye();     // Affiche le formulaire de modification
+void ui_afficherEcranGererConges();         // Affiche l'écran de gestion des congés
+void ui_afficherEcranStatistiquesPersonnel(); // Affiche les statistiques du personnel
 
 #endif

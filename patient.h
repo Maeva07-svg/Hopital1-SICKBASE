@@ -24,7 +24,7 @@ typedef struct
     char symptomes[MAX_SYMPTOMS][MAX_SYMPTOM_LENGTH];
     int nb_symptomes;
     char diagnostic[200];
-    char medecin_traitant[MAX_NAME];  // Uniquement le nom, pas l'ID
+    char medecin_traitant[MAX_NAME];
     char date_admission[20];
     char notes[500];
 } Patient;
@@ -34,7 +34,7 @@ extern Patient patients[MAX_PATIENTS];
 extern int nombrePatients;
 extern int dernierID;
 
-// Prototypes
+// Prototypes existants
 void ajouterNouveauPatient();
 void afficherListePatientsSimple();
 void afficherListePatientsPourMedecin(int id_medecin);
@@ -51,6 +51,14 @@ void completerDossierPatient(int id_compte);
 void questionnaireMedical(int id_patient);
 int patientEstLieAuMedecin(int id_patient, int id_medecin);
 void modifierMedecinTraitant(int id_patient);
-int getMedecinIDByName(char *nom_medecin);  // NOUVEAU: cherche l'ID à partir du nom
+int getMedecinIDByName(char *nom_medecin);
+
+// ========== FONCTIONS UI POUR PATIENT (à implémenter dans patient.c) ==========
+void ui_afficherEcranDossierMedical();      // Affiche le dossier médical du patient connecté
+void ui_afficherEcranMesConsultations();    // Affiche les consultations du patient
+void ui_afficherEcranMesOrdonnances();      // Affiche les ordonnances du patient
+void ui_afficherEcranMesAnalyses();         // Affiche les analyses du patient
+void ui_afficherEcranMesRendezVous();       // Affiche les rendez-vous du patient
+void ui_afficherEcranMesFactures();         // Affiche les factures du patient
 
 #endif

@@ -382,6 +382,7 @@ void creerComptePersonnel(int id_personnel, ProfilUtilisateur profil)
     printf("Mot de passe par defaut: change_me\n");
 }
 
+// ==================== FONCTION LOGIN EXISTANTE (CONSERVÉE) ====================
 int login()
 {
     system("cls");
@@ -458,6 +459,63 @@ int login()
 
     printf("\nLogin ou mot de passe incorrect.\n");
     pause();
+    return 0;
+}
+
+// ==================== NOUVELLE FONCTION POUR SDL2 ====================
+int login_with_params(char* login, char* password)
+{
+    for (int i = 0; i < nombreComptes; i++)
+    {
+        if (strcmp(comptes[i].login, login) == 0)
+        {
+            if (comptes[i].bloque)
+            {
+                printf("Compte bloque. Contactez l'administrateur.\n");
+                return 0;
+            }
+
+            if (!comptes[i].actif)
+            {
+                printf("Compte desactive.\n");
+                return 0;
+            }
+
+            if (strcmp(comptes[i].mot_de_passe, password) == 0)
+            {
+                comptes[i].tentative_echec = 0;
+                time_t t = time(NULL);
+                struct tm tm = *localtime(&t);
+                snprintf(comptes[i].date_derniere_connexion, sizeof(comptes[i].date_derniere_connexion),
+                         "%02d/%02d/%04d %02d:%02d", tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900, tm.tm_hour, tm.tm_min);
+
+                journaliserConnexion(comptes[i].id_compte, 1);
+                utilisateur_actuel = &comptes[i];
+                sauvegarderComptes();
+
+                printf("Connexion reussie! Bienvenue %s.\n", login);
+                return 1;
+            }
+            else
+            {
+                comptes[i].tentative_echec++;
+                if (comptes[i].tentative_echec >= 3)
+                {
+                    comptes[i].bloque = 1;
+                    printf("Trop de tentatives. Compte bloque.\n");
+                }
+                else
+                {
+                    printf("Mot de passe incorrect. Tentative %d/3.\n", comptes[i].tentative_echec);
+                }
+                journaliserConnexion(comptes[i].id_compte, 0);
+                sauvegarderComptes();
+                return 0;
+            }
+        }
+    }
+
+    printf("Login ou mot de passe incorrect.\n");
     return 0;
 }
 

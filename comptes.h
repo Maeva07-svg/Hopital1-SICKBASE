@@ -52,6 +52,7 @@ void creerComptePatient(int id_patient);
 void creerComptePatientAuto();        // NOUVEAU: création auto sans patient existant
 void creerComptePersonnel(int id_personnel, ProfilUtilisateur profil);
 int login();
+int login_with_params(char* login, char* password);  // NOUVELLE FONCTION POUR SDL2
 void logout();
 void modifierMotDePasse(int id_compte);
 void desactiverCompte(int id_compte);

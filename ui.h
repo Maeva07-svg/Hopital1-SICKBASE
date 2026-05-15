@@ -19,15 +19,18 @@
 #define UI_COLOR_WARNING 14
 #define UI_COLOR_INFO 11
 
-// Fonctions UI
+// ==================== FONCTIONS DE BASE ====================
 void ui_setColor(int couleur);
 void ui_resetColor();
 void ui_afficherMessageSucces(char *message);
 void ui_afficherMessageErreur(char *message);
 void ui_afficherMessageInfo(char *message);
-void ui_afficherEntete();  // CHANGÉ : plus de paramètres
+void ui_afficherEntete();
 void ui_afficherInfoUtilisateur();
 void ui_afficherMenuAuthentification();
+void ui_afficherMenuPrincipal();
+
+// ==================== ÉCRANS PRINCIPAUX ====================
 void ui_afficherMenuPatient();
 void ui_afficherMenuMedecin();
 void ui_afficherMenuInfirmier();
@@ -35,6 +38,11 @@ void ui_afficherMenuAdministrateur();
 void ui_afficherMenuTechnicienLabo();
 void ui_afficherMenuPharmacien();
 void ui_afficherMenuSuperAdmin();
-void ui_afficherMenuPrincipal();
+
+// Ajouter ces prototypes pour l'auto-diagnostic
+void ui_afficherAutoDiagnostic();
+void autoDiagnosticParQuestions();
+void autoDiagnosticParSymptomes();
+void autoDiagnosticParCorps();
 
 #endif

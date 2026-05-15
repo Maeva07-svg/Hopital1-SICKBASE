@@ -5,8 +5,9 @@
 #include "personnel.h"
 #include "fichiers_personnel.h"
 #include "utils.h"
+#include "ui.h"
 
-// D�finition des variables globales
+// Définition des variables globales
 Employe personnel[MAX_PERSONNEL];
 int nombreEmployes = 0;
 int dernierIDEmploye = 0;
@@ -25,9 +26,10 @@ const char *noms_fonctions[] = {
 
 void initialiserFonctionsPersonnel()
 {
-    // Cette fonction pourrait charger des donn�es par d�faut
-    // Ou initialiser des structures si n�cessaire
+    // Rien à initialiser
 }
+
+// ==================== FONCTIONS EXISTANTES ====================
 
 void ajouterEmploye()
 {
@@ -45,7 +47,7 @@ void ajouterEmploye()
     memset(&e, 0, sizeof(Employe));
 
     e.id = ++dernierIDEmploye;
-    e.actif = 1;  // Actif par d�faut
+    e.actif = 1;
 
     printf("INFORMATIONS PERSONNELLES\n\n");
 
@@ -207,9 +209,9 @@ void afficherDetailsCompletEmploye(int index)
     printf("  Specialite: %s\n", e.specialite);
     printf("  Service: %s\n", e.service);
     printf("  Diplomes: %s\n", e.diplomes);
-    printf("  N� Ordre: %s\n", e.numero_ordre);
+    printf("  N° Ordre: %s\n", e.numero_ordre);
     printf("  Date embauche: %s\n", e.date_embauche);
-    printf("  Salaire: %.2f �\n", e.salaire);
+    printf("  Salaire: %.2f €\n", e.salaire);
     printf("  Heures/semaine: %d\n", e.heures_semaine);
     printf("  Statut: %s\n", e.actif ? "Actif" : "Inactif");
 
@@ -246,7 +248,6 @@ int rechercherEmployeParNom(char *nom)
     char nomRecherche[MAX_NAME];
     strcpy(nomRecherche, nom);
 
-    // Convertir en minuscules pour la recherche
     for(int i = 0; nomRecherche[i]; i++)
         nomRecherche[i] = tolower(nomRecherche[i]);
 
@@ -383,87 +384,72 @@ void modifierEmploye(int index)
                 fgets(e->nom, MAX_NAME, stdin);
                 e->nom[strcspn(e->nom, "\n")] = '\0';
                 break;
-
             case 2:
                 printf("Nouveau prenom: ");
                 fgets(e->prenom, MAX_NAME, stdin);
                 e->prenom[strcspn(e->prenom, "\n")] = '\0';
                 break;
-
             case 3:
                 printf("Nouveau telephone: ");
                 fgets(e->telephone, 20, stdin);
                 e->telephone[strcspn(e->telephone, "\n")] = '\0';
                 break;
-
             case 4:
                 printf("Nouvel email: ");
                 fgets(e->email, 100, stdin);
                 e->email[strcspn(e->email, "\n")] = '\0';
                 break;
-
             case 5:
                 printf("Nouvelle adresse: ");
                 fgets(e->adresse, 200, stdin);
                 e->adresse[strcspn(e->adresse, "\n")] = '\0';
                 break;
-
             case 6:
                 printf("Nouvelle fonction: ");
                 fgets(e->fonction, 50, stdin);
                 e->fonction[strcspn(e->fonction, "\n")] = '\0';
                 break;
-
             case 7:
                 printf("Nouvelle specialite: ");
                 fgets(e->specialite, MAX_SPECIALITE, stdin);
                 e->specialite[strcspn(e->specialite, "\n")] = '\0';
                 break;
-
             case 8:
                 printf("Nouveau service: ");
                 fgets(e->service, MAX_SERVICE, stdin);
                 e->service[strcspn(e->service, "\n")] = '\0';
                 break;
-
             case 9:
                 printf("Nouveau salaire: ");
                 scanf("%f", &e->salaire);
                 viderBuffer();
                 break;
-
             case 10:
                 printf("Nouvelles heures/semaine: ");
                 scanf("%d", &e->heures_semaine);
                 viderBuffer();
                 break;
-
             case 11:
                 e->actif = !e->actif;
                 printf("Statut change en: %s\n", e->actif ? "Actif" : "Inactif");
                 break;
-
             case 12:
                 printf("Nouveaux horaires: ");
                 fgets(e->horaires_travail, MAX_HORAIRES, stdin);
                 e->horaires_travail[strcspn(e->horaires_travail, "\n")] = '\0';
                 break;
-
             case 13:
                 printf("Nouvelles notes: ");
                 fgets(e->notes, 500, stdin);
                 e->notes[strcspn(e->notes, "\n")] = '\0';
                 break;
-
             case 14:
                 sauvegarderPersonnel();
                 printf("\nModifications sauvegardees avec succes!\n");
                 return;
-
             case 15:
                 printf("\nModifications annulees.\n");
                 return;
-
             default:
                 printf("Choix invalide.\n");
         }
@@ -665,40 +651,33 @@ void afficherStatistiquesPersonnel()
     int hommes = 0, femmes = 0;
     float totalSalaire = 0;
 
-    // Tableaux pour compter par fonction
     int medecins = 0, infirmiers = 0, administratifs = 0;
     int techniciens = 0, chirurgiens = 0, radiologues = 0, pharmaciens = 0;
     int autres = 0;
 
-    // Tableau pour compter par service
     char services[MAX_PERSONNEL][MAX_SERVICE];
     int nb_services = 0;
     int comptes_services[MAX_PERSONNEL] = {0};
 
     for (int i = 0; i < nombreEmployes; i++)
     {
-        // Compter actifs/inactifs
         if (personnel[i].actif) actifs++;
         else inactifs++;
 
-        // Compter par genre
         if (personnel[i].genre == 'M') hommes++;
         else if (personnel[i].genre == 'F') femmes++;
 
-        // Compter salaire total
         totalSalaire += personnel[i].salaire;
 
-        // Compter par fonction (en ignorant la casse)
         char fonction_temp[MAX_NAME];
         strcpy(fonction_temp, personnel[i].fonction);
 
-        // Convertir en minuscules pour comparaison
         for (int j = 0; fonction_temp[j]; j++)
             fonction_temp[j] = tolower(fonction_temp[j]);
 
-        if (strstr(fonction_temp, "medecin") != NULL || strstr(fonction_temp, "m�decin") != NULL)
+        if (strstr(fonction_temp, "medecin") != NULL || strstr(fonction_temp, "médecin") != NULL)
             medecins++;
-        else if (strstr(fonction_temp, "infirmier") != NULL || strstr(fonction_temp, "infirmi�re") != NULL)
+        else if (strstr(fonction_temp, "infirmier") != NULL || strstr(fonction_temp, "infirmière") != NULL)
             infirmiers++;
         else if (strstr(fonction_temp, "administratif") != NULL || strstr(fonction_temp, "admin") != NULL)
             administratifs++;
@@ -713,7 +692,6 @@ void afficherStatistiquesPersonnel()
         else
             autres++;
 
-        // Compter par service
         if (strlen(personnel[i].service) > 0)
         {
             int trouve = 0;
@@ -768,10 +746,9 @@ void afficherStatistiquesPersonnel()
     }
 
     printf("\n=== SALAIRES ===\n");
-    printf("  Masse salariale mensuelle: %.2f �\n", totalSalaire);
-    printf("  Salaire moyen: %.2f �\n", totalSalaire / nombreEmployes);
+    printf("  Masse salariale mensuelle: %.2f €\n", totalSalaire);
+    printf("  Salaire moyen: %.2f €\n", totalSalaire / nombreEmployes);
 
-    // Ajouter les statistiques des cong�s
     int total_conges_annuels = 0;
     int total_conges_restants = 0;
     for (int i = 0; i < nombreEmployes; i++)
@@ -855,7 +832,7 @@ void menuGestionPersonnel()
     do
     {
         system("cls");
-        color(11, 0); // Cyan
+        color(11, 0);
         printf("\n=== GESTION DU PERSONNEL ===\n\n");
         color(7, 0);
 
@@ -960,4 +937,224 @@ void menuGestionPersonnel()
         }
 
     } while(choix != 7);
+}
+
+// ==================== FONCTIONS UI POUR PERSONNEL ====================
+
+void ui_afficherEcranPersonnel()
+{
+    ui_afficherEntete();
+    ui_setColor(UI_COLOR_TITLE);
+    printf("╔════════════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║                         GESTION DU PERSONNEL                                   ║\n");
+    printf("╠════════════════════════════════════════════════════════════════════════════════╣\n");
+    ui_resetColor();
+    printf("║                                                                                ║\n");
+    printf("║     [1]  Ajouter un employe                                                    ║\n");
+    printf("║     [2]  Modifier un employe                                                   ║\n");
+    printf("║     [3]  Supprimer un employe                                                  ║\n");
+    printf("║     [4]  Rechercher un employe                                                 ║\n");
+    printf("║     [5]  Lister tous les employes                                              ║\n");
+    printf("║     [6]  Gerer les conges                                                      ║\n");
+    printf("║     [7]  Statistiques personnel                                                ║\n");
+    printf("║     [8]  Retour                                                                ║\n");
+    printf("║                                                                                ║\n");
+    ui_setColor(8);
+    printf("╚════════════════════════════════════════════════════════════════════════════════╝\n");
+    ui_resetColor();
+    printf("\n    Votre choix: ");
+}
+
+void ui_afficherListePersonnel()
+{
+    ui_afficherEntete();
+    ui_setColor(UI_COLOR_TITLE);
+    printf("╔════════════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║                         LISTE DU PERSONNEL                                     ║\n");
+    printf("╠════════════════════════════════════════════════════════════════════════════════╣\n");
+    ui_resetColor();
+
+    if (nombreEmployes == 0)
+    {
+        ui_setColor(UI_COLOR_WARNING);
+        printf("║                                                                                ║\n");
+        printf("║                        Aucun employe enregistre                                ║\n");
+        printf("║                                                                                ║\n");
+        ui_setColor(8);
+        printf("╚════════════════════════════════════════════════════════════════════════════════╝\n");
+        ui_resetColor();
+        return;
+    }
+
+    ui_setColor(UI_COLOR_INFO);
+    printf("║                                                                                ║\n");
+    printf("║     ID  │ Nom & Prenom           │ Fonction      │ Service       │ Actif       ║\n");
+    printf("║    ─────┼────────────────────────┼───────────────┼───────────────┼─────────────║\n");
+    ui_resetColor();
+
+    for (int i = 0; i < nombreEmployes; i++)
+    {
+        if (i % 2 == 0)
+            ui_setColor(UI_COLOR_PATIENT);
+        else
+            ui_setColor(UI_COLOR_MEDECIN);
+
+        printf("║    %4d │ %-10s %-10s │ %-13s │ %-13s │ %-9s ║\n",
+               personnel[i].id,
+               personnel[i].prenom,
+               personnel[i].nom,
+               personnel[i].fonction,
+               personnel[i].service,
+               personnel[i].actif ? "Actif" : "Inactif");
+        ui_resetColor();
+    }
+
+    ui_setColor(8);
+    printf("║                                                                                ║\n");
+    printf("║    Total: %d employe(s)                                                        ║\n", nombreEmployes);
+    printf("╚════════════════════════════════════════════════════════════════════════════════╝\n");
+    ui_resetColor();
+}
+
+void ui_afficherEcranAjouterEmploye()
+{
+    ui_afficherEntete();
+    ui_setColor(UI_COLOR_TITLE);
+    printf("╔════════════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║                         AJOUT D'UN EMPLOYE                                     ║\n");
+    printf("╠════════════════════════════════════════════════════════════════════════════════╣\n");
+    ui_resetColor();
+    printf("║                                                                                ║\n");
+    printf("║    [1]  Ajouter un medecin                                                     ║\n");
+    printf("║    [2]  Ajouter un infirmier                                                   ║\n");
+    printf("║    [3]  Ajouter un administrateur                                              ║\n");
+    printf("║    [4]  Ajouter un technicien                                                  ║\n");
+    printf("║    [5]  Ajouter un chirurgien                                                  ║\n");
+    printf("║    [6]  Ajouter un radiologue                                                  ║\n");
+    printf("║    [7]  Ajouter un pharmacien                                                  ║\n");
+    printf("║    [8]  Retour                                                                 ║\n");
+    printf("║                                                                                ║\n");
+    ui_setColor(8);
+    printf("╚════════════════════════════════════════════════════════════════════════════════╝\n");
+    ui_resetColor();
+    printf("\n    Votre choix: ");
+}
+
+void ui_afficherEcranModifierEmploye()
+{
+    ui_afficherEntete();
+    ui_setColor(UI_COLOR_TITLE);
+    printf("╔════════════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║                         MODIFICATION D'UN EMPLOYE                              ║\n");
+    printf("╠════════════════════════════════════════════════════════════════════════════════╣\n");
+    ui_resetColor();
+    printf("║                                                                                ║\n");
+    printf("║    Entrez l'ID de l'employe a modifier:                                        ║\n");
+    printf("║    ┌────────────────────────────────────────────────────────────────────────┐  ║\n");
+    printf("║    │                                                                        │  ║\n");
+    printf("║    └────────────────────────────────────────────────────────────────────────┘  ║\n");
+    printf("║                                                                                ║\n");
+    ui_setColor(8);
+    printf("╚════════════════════════════════════════════════════════════════════════════════╝\n");
+    ui_resetColor();
+    printf("\n    ID: ");
+}
+
+void ui_afficherEcranGererConges()
+{
+    ui_afficherEntete();
+    ui_setColor(UI_COLOR_TITLE);
+    printf("╔════════════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║                         GESTION DES CONGES                                     ║\n");
+    printf("╠════════════════════════════════════════════════════════════════════════════════╣\n");
+    ui_resetColor();
+    printf("║                                                                                ║\n");
+    printf("║    Entrez l'ID de l'employe:                                                   ║\n");
+    printf("║    ┌────────────────────────────────────────────────────────────────────────┐  ║\n");
+    printf("║    │                                                                        │  ║\n");
+    printf("║    └────────────────────────────────────────────────────────────────────────┘  ║\n");
+    printf("║                                                                                ║\n");
+    printf("║    [1]  Prendre des conges                                                     ║\n");
+    printf("║    [2]  Ajouter des conges                                                     ║\n");
+    printf("║    [3]  Retour                                                                 ║\n");
+    printf("║                                                                                ║\n");
+    ui_setColor(8);
+    printf("╚════════════════════════════════════════════════════════════════════════════════╝\n");
+    ui_resetColor();
+    printf("\n    Votre choix: ");
+}
+
+void ui_afficherEcranStatistiquesPersonnel()
+{
+    ui_afficherEntete();
+    ui_setColor(UI_COLOR_TITLE);
+    printf("╔════════════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║                      STATISTIQUES DU PERSONNEL                                 ║\n");
+    printf("╠════════════════════════════════════════════════════════════════════════════════╣\n");
+    ui_resetColor();
+
+    if (nombreEmployes == 0)
+    {
+        ui_setColor(UI_COLOR_WARNING);
+        printf("║                                                                                ║\n");
+        printf("║                        Aucun employe enregistre                                ║\n");
+        printf("║                                                                                ║\n");
+        ui_setColor(8);
+        printf("╚════════════════════════════════════════════════════════════════════════════════╝\n");
+        ui_resetColor();
+        return;
+    }
+
+    int actifs = 0, inactifs = 0;
+    int hommes = 0, femmes = 0;
+    float totalSalaire = 0;
+    int medecins = 0, infirmiers = 0, autres_fonctions = 0;
+
+    for (int i = 0; i < nombreEmployes; i++)
+    {
+        if (personnel[i].actif) actifs++;
+        else inactifs++;
+        if (personnel[i].genre == 'M') hommes++;
+        else if (personnel[i].genre == 'F') femmes++;
+        totalSalaire += personnel[i].salaire;
+
+        if (strstr(personnel[i].fonction, "Medecin") != NULL) medecins++;
+        else if (strstr(personnel[i].fonction, "Infirmier") != NULL) infirmiers++;
+        else autres_fonctions++;
+    }
+
+    printf("║                                                                                ║\n");
+    printf("║    ┌────────────────────────────────────────────────────────────────────────┐  ║\n");
+    printf("║    │  STATUT                                                                │  ║\n");
+    printf("║    ├────────────────────────────────────────────────────────────────────────┤  ║\n");
+    printf("║    │  Total employes : %-51d │ ║\n", nombreEmployes);
+    printf("║    │  Actifs          : %-51d │ ║\n", actifs);
+    printf("║    │  Inactifs        : %-51d │ ║\n", inactifs);
+    printf("║    └────────────────────────────────────────────────────────────────────────┘  ║\n");
+    printf("║                                                                                ║\n");
+    printf("║    ┌────────────────────────────────────────────────────────────────────────┐  ║\n");
+    printf("║    │  REPARTITION PAR GENRE                                                 │  ║\n");
+    printf("║    ├────────────────────────────────────────────────────────────────────────┤  ║\n");
+    printf("║    │  Hommes          : %-51d │ ║\n", hommes);
+    printf("║    │  Femmes          : %-51d │ ║\n", femmes);
+    printf("║    └────────────────────────────────────────────────────────────────────────┘  ║\n");
+    printf("║                                                                                ║\n");
+    printf("║    ┌────────────────────────────────────────────────────────────────────────┐  ║\n");
+    printf("║    │  REPARTITION PAR FONCTION                                              │  ║\n");
+    printf("║    ├────────────────────────────────────────────────────────────────────────┤  ║\n");
+    printf("║    │  Medecins        : %-51d │ ║\n", medecins);
+    printf("║    │  Infirmiers      : %-51d │ ║\n", infirmiers);
+    printf("║    │  Autres          : %-51d │ ║\n", autres_fonctions);
+    printf("║    └────────────────────────────────────────────────────────────────────────┘  ║\n");
+    printf("║                                                                                ║\n");
+    printf("║    ┌────────────────────────────────────────────────────────────────────────┐  ║\n");
+    printf("║    │  SALAIRES                                                              │  ║\n");
+    printf("║    ├────────────────────────────────────────────────────────────────────────┤  ║\n");
+    printf("║    │  Masse salariale : %-51.2f € │ ║\n", totalSalaire);
+    printf("║    │  Salaire moyen   : %-51.2f € │ ║\n", totalSalaire / nombreEmployes);
+    printf("║    └────────────────────────────────────────────────────────────────────────┘  ║\n");
+    printf("║                                                                                ║\n");
+    ui_setColor(8);
+    printf("╚════════════════════════════════════════════════════════════════════════════════╝\n");
+    ui_resetColor();
 }
